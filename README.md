@@ -21,3 +21,6 @@ FAST: RMessenger is the fastest messaging app on the market, connecting people v
   * PRIVATE: We take your privacy seriously and will never give third parties access to your data.
 
 For those interested in maximum privacy, RMessenger offers Secret Chats. Secret Chat messages can be programmed to self-destruct automatically from both participating devices.
+
+
+![RMessenger Diagram](https://github.com/borisjacksone/RMessenger/blob/master/app/src/main/ic_launcher-web.png)
