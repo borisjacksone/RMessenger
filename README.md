@@ -2,7 +2,7 @@
 
 **True instant messaging — simple, fast, secure, and private across all your devices.**
 
-![RMessenger Diagram](https://drive.google.com/file/d/1k-Jn-wPVmOnH1YM2w-5zRL_9SB76Kq6O/view?usp=sharing)
+![RMessenger Diagram](https://github.com/borisjacksone/RMessenger/blob/master/app/src/main/res/drawable/desc_pic.png)
 
 FAST: RMessenger is the fastest messaging app on the market, connecting people via a unique, distributed                network of data centers around the globe.
 
