@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:layout_gravity="center">
+
+    <ProgressBar
+        android:id="@+id/progressBarReady"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:indeterminateDrawable="@drawable/progress_ready"
+        android:layout_centerInParent="true" />
+
+    <ProgressBar
+        android:id="@+id/progressBarDoing"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:indeterminateDrawable="@drawable/progress_doing"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progressBarDone"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:indeterminateDrawable="@drawable/progress_done"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/startRecordButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/button_start" />
+
+    <ImageButton
+        android:id="@+id/stopRecordButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/button_stop"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/resultButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/button_result"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/textStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:text="00s"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

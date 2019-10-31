@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view_login_activity"
+    style="@style/MatchParent"
+    android:layout_marginLeft="@dimen/login_padding_left_right"
+    android:layout_marginRight="@dimen/login_padding_left_right"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/login_method_view"
+        style="@style/MatchWidth"
+        android:paddingTop="@dimen/login_padding_actionbar"
+        android:text="@string/login_new_name" />
+
+    <EditText
+        android:id="@+id/user_name"
+        style="@style/MatchWidth"
+        android:hint="@string/login_hint_username"
+        android:maxLength="15"
+        android:paddingTop="@dimen/login_padding_top"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/button_login"
+        android:layout_width="match_parent"
+        android:background="@color/color_accent"
+        style="@style/MatchWidth"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/white"
+        android:layout_height="40dp"
+        android:visibility="visible"/>
+</LinearLayout>

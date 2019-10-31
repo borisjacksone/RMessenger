@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ListItem"
+    tools:ignore="RtlHardcoded">
+
+    <RelativeLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="@dimen/list_item_side_margin"
+        android:layout_marginLeft="@dimen/list_item_side_margin">
+        <ImageView
+            android:id="@+id/image_user"
+            style="@style/ListItemIconStyle"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_chat_group"
+            android:layout_centerInParent="true"/>
+        <TextView
+            android:id="@+id/nameAbbr"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="OK"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:singleLine="true" />
+        <ImageView
+            android:id="@+id/viewOnlineMark"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_mark_online" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_user_login"
+        style="@style/UserTitleStyle" />
+
+    <CheckBox
+        android:id="@+id/checkbox_user"
+        style="@style/UserCheckboxStyle" />
+</LinearLayout>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="sender_id">804530333930</string>
+
+    <string name="app_name">R메신저</string>
+    <string name="chat_sample">R메신저</string>
+
+    <string name="menu_new_chat">새 채팅</string>
+    <string name="menu_chat_info">채팅 정보</string>
+    <string name="menu_add_users_to_chat">사용자 초대</string>
+    <string name="menu_leave_chat">나가기</string>
+    <string name="menu_delete_chat">삭 제</string>
+    <string name="menu_dialogs_logout">로그아웃</string>
+    <string name="menu_dialogs_delete">삭 제</string>
+    <string name="menu_dialogs_app_info">앱 정보</string>
+    <string name="menu_select_people_done">완 료</string>
+    <string name="menu_start_login_done">완 료</string>
+
+    <string name="error_name_must_not_contain_special_characters_from_app">%1$s must contain 3 &#8212; %2$s alphanumeric Latin characters without spaces, the first char must be a letter</string>
+    <string name="field_name_user_login">로그인 식별자</string>
+    <string name="field_name_user_fullname">사용자 이름</string>
+
+    <string name="dlg_loading">로 딩…</string>
+    <string name="dlg_restoring_chat_session">채팅세션 복귀중…</string>
+    <string name="dlg_restoring_chat_session_logout">세션복귀 및 로그아웃</string>
+    <string name="create_chat">채팅창조…</string>
+    <string name="dlg_login">로그인…</string>
+    <string name="new_chat_created">%s 님이 새 채팅을 창조 </string>
+    <string name="occupant_added">%s 님이 %s 님을 초대</string>
+    <string name="occupant_left">%s 님이 나갔습니다</string>
+
+    <string name="chat_still_joining">여전히 그룹 채팅에 참여하고 있습니다. 잠시만 기다려주세요.</string>
+    <string name="chat_error_send_message">메시지를 보낼 수 없습니다. 채팅에 연결되어 있지 않습니다.</string>
+
+    <string name="placeholder_username_you">%s (본인)</string>
+    <string name="error_recreate_session">로그인 오류</string>
+
+    <string name="login_title">@string/chat_sample</string>
+
+    <string name="splash_app_title">@string/chat_sample</string>
+    <string name="splash_create_session_error">세션창조 오류:</string>
+
+    <string name="login_select_user_for_login">채팅에 로그인 할 사용자를 선택하십시오.</string>
+    <string name="login_cant_obtain_users">사용자 오류를 얻을 수 없습니다.</string>
+    <string name="login_chat_login_error">로그인 채팅 오류. 다시 로그인하십시오.</string>
+    <string name="login_new_name">이름을 입력하고 로그인 하십시오.</string>
+    <string name="login_last_name">다음의 계정으로 로그인 하십시오.</string>
+    <string name="login_hint_login">로그인</string>
+    <string name="login_hint_username">이 름(영숫자)</string>
+    <string name="login_sign_up_error">가입 오류</string>
+    <string name="login_data_error">잘못된 로그인</string>
+    <string name="username_data_error">잘못된 이름</string>
+
+    <string name="dialogs_logged_in_as">%s</string>
+    <string name="dialogs_cannot_delete_chat">%s 에서 나갈수 없습니다.</string>
+    <string name="dialogs_creation_error">창조 오류</string>
+    <string name="dialogs_deletion_error">삭제 오류</string>
+    <string name="dialogs_list_hint">채팅을 선택하십시오.</string>
+    <string name="dialogs_get_error">로딩 오류</string>
+
+    <string name="select_users_list_hint">채팅할 사용자를 선택하십시오.</string>
+    <string name="select_users_create_chat">새 채팅 창조</string>
+    <string name="select_users_edit_chat">채팅에 사용자 초대</string>
+    <string name="select_users_get_users_error">사용자로딩 오류</string>
+    <string name="select_users_get_dialog_error">서버접속 오류</string>
+    <string name="select_users_get_users_dialog_error">서버접속 오류</string>
+    <string name="select_users_choose_users">적어서 한명 이상의 참가자를 선택하십시오</string>
+
+    <string name="chat_sticker">스티커</string>
+    <string name="chat_send">전 송</string>
+    <string name="chat_edit_text_hint">메시지</string>
+    <string name="chat_me">나</string>
+    <string name="chat_friend">친 구</string>
+    <string name="chat_join_error">그룹가입 오류</string>
+    <string name="chat_send_message_error">메시지 전송 오류</string>
+    <string name="chat_load_history_error">채팅이력 로딩 오류</string>
+    <string name="chat_load_users_error">채팅사용자 로딩 오류</string>
+    <string name="chat_attachment_error">선택한 파일을로드 할 수 없습니다.</string>
+    <string name="chat_attachment">첨부파일</string>
+    <string name="chat_empty_you_are_alone_here">외롭게 혼자네요.</string>
+    <string name="chat_empty_start_new_chat">채팅 시작.</string>
+    <string name="chat_unsupported_type">형식 오류</string>
+    <string name="chat_wait_for_attachments_to_upload">모든 첨부 파일이 업로드 될 때까지 기다립니다.</string>
+    <string name="notification_title">채팅 알림</string>
+    <string name="connection_error">채팅 연결이 끊어졌습니다.</string>
+    <string name="update_dialog_error">업데이트 오류</string>
+    <string name="reconnect_alert"> %s 초 후에 재접속 합니다.</string>
+
+    <string name="restriction_upload_files">최대 첨부 파일수: %d</string>
+
+    <string name="added_users">사용자들이 초대 되였습니다.</string>
+
+    <string name="chat_info">채팅 정보</string>
+    <string name="chat_info_add_people_error">초대 오류</string>
+
+    <string name="group_chat_join_error">채팅에 참여하지 못했습니다:</string>
+    <string name="public_group_chat_cannot_be_deleted">공개 그룹 채팅은 소유자 만 삭제할 수 있습니다</string>
+    <string name="error_leave_chat">나가기 오류</string>
+
+    <string name="appinfo_application_version">앱 버전:</string>
+    <string name="appinfo_qbsdk_version">SDK 버전:</string>
+    <string name="appinfo_application_id">앱 ID:</string>
+    <string name="appinfo_authorization_key">인증 키:</string>
+    <string name="appinfo_authorization_secret">인증 비밀키:</string>
+    <string name="appinfo_account_key">계정 키:</string>
+    <string name="appinfo_api_domain">API 도메인:</string>
+    <string name="appinfo_chat_domain">Chat 도메인:</string>
+    <string name="appinfo_qa_verion">QA 버전:</string>
+    <string name="appinfo_title">앱 정보</string>
+
+    <string name="statuses_delivered">수 신</string>
+    <string name="statuses_read">읽 음</string>
+    <string name="statuses_sent">전 송</string>
+
+    <string name="dialog_enter_chat_name">채팅이름 입력</string>
+    <string name="dialog_OK">확 인</string>
+    <string name="dialog_Cancel">취 소</string>
+    <string name="dialog_retry">재시도</string>
+    <string name="dialog_choose_image_from">이미지 선택…</string>
+
+    <string name="error_credentials_empty">자격 증명이 잘못되었거나 비어 있습니다. 다음을 설정해야합니다.
+        App.java에서 응용 프로그램 ID, 인증 키, 인증 비밀, 계정 키 상수
+        애플리케이션을 시작하려면 문자열 리소스에서 발신자 ID를 설정해야합니다.
+        계정이 없으면 https://admin.quickblox.com에서 새 계정 및 응용 프로그램을 등록 할 수 있습니다.
+        그런 다음 개요 페이지에서 응용 프로그램 자격 증명을 입력하고 https://admin.quickblox.com/account/settings의 계정 키를 입력하십시오.</string>
+    <string name="no_internet_connection">인터넷 오류</string>
+    <string name="no_server_connection">서버 연결 시간 초과</string>
+    <string name="error">오 류</string>
+
+    <string name="login_button_text_format">%s 님으로 계속</string>
+    <string name="menu_dialogs_change_name">이름 변경</string>
+    <string name="change_name_fail">이름 변경 실패</string>
+    <string name="change_name_success">이름 변경 성공</string>
+    <string name="new_name">이 름(영숫자)…</string>
+    <string name="enter_new_name">새 이름을 입력하십시오.</string>
+    <string name="wait">잠시만 기다려주세요.</string>
+    <string name="menu_select_image">이미지</string>
+    <string name="menu_select_audio">오디오</string>
+    <string name="dialog_choose_audio_from">오디오 선택…</string>
+    <string name="text_duration">음 장&#160;:&#160;</string>
+    <string name="record_result_format">%02ds\n녹음파일</string>
+    <string name="menu_dialogs_invite_friend">친구 초대</string>
+    <string name="phone_not_selected">전화 번호를 선택하셔야 합니다.</string>
+    <string name="unknown_error">알수없는 오류</string>
+    <string name="sms_sent_success">메시지가 성공적으로 전송되었습니다.</string>
+    <string name="sms_generic_failure">일반 오류</string>
+    <string name="sms_service_error">서비스 오류</string>
+    <string name="sms_null_pdu">PDU 오류</string>
+    <string name="sms_radio_off">Radio off 상태</string>
+    <string name="msg_not_delivered">전송 실패</string>
+    <string name="msg_delivery_success">메시지 전송 성공</string>
+    <string name="appinfo_application_description">
+        진정한 인스턴트 메신저 — 모든 기기에서 간단하고 빠르며 안전하며 비공개입니다.\n\n
+        속 도 : R메신저는 속도가 빠른 메시징 앱으로 전 세계의 고유 한 분산 데이터 센터 네트워크를 통해 사람들을 연결합니다.\n\n
+        제한 없음 : 유형과 크기에 제한없이 미디어와 파일을 보낼 수 있습니다. 전체 채팅 기록에는 기기에 디스크 공간이 필요하지 않으며 필요한 동안 R메신저 클라우드에 안전하게 저장됩니다.\n\n
+        보안 : 우리는 사용 편의성과 결합 된 최상의 보안을 제공하는 것을 사명으로 삼았습니다. 채팅, 그룹, 미디어 등 R메신저의 모든 것은 256 비트 대칭 AES 암호화, 2048 비트 RSA 암호화 및 Diffie-Hellman 보안 키 교환의 조합을 사용하여 암호화됩니다.\n\n
+        강력한 기능 : 최대 50 명의 회원을위한 그룹 채팅을 만들고 미디어 파일을 공유 할 수 있습니다. 온라인 커뮤니티를 호스팅 하기위한 완벽한 도구입니다.\n\n
+        신뢰 할 수 있는 : 가능한 최소 바이트로 메시지를 전달하도록 구축 된 R메신저는 가장 안정적인 메시징 시스템입니다.\n\n
+        단순성 : 훌륭한 기능을 제공하면서도 인터페이스를 깨끗하게 유지하기 위해 각별한주의를 기울이고 있습니다. 미니멀리스트 디자인으로 R메신저는 간결하고 사용하기 쉽습니다.\n\n
+        100 % 무료 &amp; 노 광고 : R메신저는 무료이며 앞으로도 항상 무료입니다. 광고를 판매하거나 구독료를 도입하지 않습니다.\n\n
+        개인 정보 : 개인 정보를 중요하게 생각하며 제 3 자에게 귀하의 데이터에 대한 액세스를 제공하지 않습니다.\n\n
+        최대한의 개인 정보 보호에 관심이있는 사람들을 위해 R메신저는 비밀 채팅을 제공합니다. 비밀 채팅 메시지는 참여하는 두 장치에서 자동으로 자체 파괴되도록 기획 할 수 있습니다.
+    </string>
+
+</resources>

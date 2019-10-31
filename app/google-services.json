@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "804530333930",
+    "firebase_url": "https://royalchat-f8ccb.firebaseio.com",
+    "project_id": "royalchat-f8ccb",
+    "storage_bucket": "royalchat-f8ccb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:804530333930:android:5f2c64d80a487f1087cf93",
+        "android_client_info": {
+          "package_name": "com.royal.chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "804530333930-v18tkf4kmb50u96cer63db5ncab8geul.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.royal.chat",
+            "certificate_hash": "b432faf0968e54adc663b979a36aab18a5404674"
+          }
+        },
+        {
+          "client_id": "804530333930-4nel629cg1ll3a6dg965vckkuhur65cc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5lEyATLYMtUg5YWVu-qksc84dGFgVzeI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "804530333930-4nel629cg1ll3a6dg965vckkuhur65cc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

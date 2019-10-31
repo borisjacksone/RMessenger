@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_root"
+    style="@style/MatchParent"
+    tools:context="com.royal.chat.ui.activity.SplashActivity">
+
+    <LinearLayout
+        style="@style/WrapContent"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/app_icon"
+            app:srcCompat="@drawable/app_icon"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/color_primary_dark" />
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            android:id="@+id/text_splash_app_version"
+            style="@style/SplashAppVersionStyle"
+            android:layout_marginTop="20dp"
+            tools:text="1.0.0" />
+    </LinearLayout>
+
+</RelativeLayout>
