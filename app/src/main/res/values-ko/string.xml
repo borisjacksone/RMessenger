@@ -154,6 +154,9 @@
     <string name="text_english">English</string>
     <string name="text_korean">한국어</string>
     <string name="text_ok">확 인</string>
+    <string name="need_accept_privacy_policy">개인 정보 보호 정책을 수락해야합니다.</string>
+    <string name="text_privacy_checkbox">개인 정보 보호 정책에 동의합니다.</string>
+    <string name="need_accept_permissions">권한을 허용해야합니다.</string>
     <string name="appinfo_application_description">
         진정한 인스턴트 메신저 — 모든 기기에서 간단하고 빠르며 안전하며 비공개입니다.\n\n
         속 도 : R메신저는 속도가 빠른 메시징 앱으로 전 세계의 고유 한 분산 데이터 센터 네트워크를 통해 사람들을 연결합니다.\n\n

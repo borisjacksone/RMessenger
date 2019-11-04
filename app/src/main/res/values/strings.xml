@@ -154,6 +154,9 @@
     <string name="text_english">English</string>
     <string name="text_korean">한국어</string>
     <string name="text_ok">OK</string>
+    <string name="text_privacy_checkbox">I accept privacy policy.</string>
+    <string name="need_accept_privacy_policy">You should accept privacy policy.</string>
+    <string name="need_accept_permissions">You should allow permissions.</string>
     <string name="appinfo_application_description">
         True instant messaging — simple, fast, secure, and private across all your devices.\n\n
         FAST: RMessenger is the fastest messaging app on the market, connecting people via a unique, distributed network of data centers around the globe.\n\n

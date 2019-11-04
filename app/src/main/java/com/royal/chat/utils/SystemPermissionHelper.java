@@ -14,9 +14,20 @@ public class SystemPermissionHelper {
     public static final int PERMISSIONS_FOR_SAVE_FILE_IMAGE_REQUEST = 1010;
     public static final int PERMISSIONS_FOR_SAVE_FILE_AUDIO_REQUEST = 2020;
     public static final int PERMISSIONS_FOR_SEND_SMS_REQUEST = 3030;
+    public static final int PERMISSIONS_FOR_ALL = 4040;
 
     private Activity activity;
     private Fragment fragment;
+
+    private String[] all_permissions = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_SMS,
+            Manifest.permission.SEND_SMS,
+            Manifest.permission.READ_CONTACTS
+    };
 
     public SystemPermissionHelper(Activity activity) {
         this.activity = activity;
@@ -35,7 +46,16 @@ public class SystemPermissionHelper {
     }
 
     public boolean isSendSmsPermissionGranted() {
-        return isPermissionGranted(Manifest.permission.READ_SMS) && isPermissionGranted(Manifest.permission.SEND_SMS);
+        return isPermissionGranted(Manifest.permission.READ_SMS) && isPermissionGranted(Manifest.permission.SEND_SMS) && isPermissionGranted(Manifest.permission.READ_CONTACTS);
+    }
+
+    public boolean isAllPermissionGranted() {
+        for (String permission : all_permissions) {
+            if (!isPermissionGranted(permission)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean isPermissionGranted(String permission) {
@@ -55,7 +75,11 @@ public class SystemPermissionHelper {
     }
 
     public void requestPermissionsForSendSms() {
-        checkAndRequestPermissions(PERMISSIONS_FOR_SEND_SMS_REQUEST, new String[]{Manifest.permission.READ_SMS, Manifest.permission.SEND_SMS});
+        checkAndRequestPermissions(PERMISSIONS_FOR_SEND_SMS_REQUEST, new String[]{Manifest.permission.READ_SMS, Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS});
+    }
+
+    public void requestPermissionsForAll() {
+        checkAndRequestPermissions(PERMISSIONS_FOR_ALL, all_permissions);
     }
 
     private void checkAndRequestPermissions(int requestCode, String... permissions) {

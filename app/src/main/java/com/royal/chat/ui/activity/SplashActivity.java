@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.quickblox.auth.session.QBSessionManager;
@@ -25,15 +26,19 @@ import com.royal.chat.App;
 import com.royal.chat.R;
 import com.royal.chat.ui.dialog.ProgressDialogFragment;
 import com.royal.chat.utils.SharedPrefsHelper;
+import com.royal.chat.utils.SystemPermissionHelper;
+import com.royal.chat.utils.ToastUtils;
+import com.royal.chat.utils.audiopick.AudioPickHelper;
 import com.royal.chat.utils.chat.ChatHelper;
 import com.quickblox.users.model.QBUser;
 
 import java.util.Locale;
 
 public class SplashActivity extends BaseActivity {
-    private static final int SPLASH_DELAY = 1500;
+    private static final int SPLASH_DELAY = 2000;
 
     private static final String TAG = SplashActivity.class.getSimpleName();
+    private SystemPermissionHelper permissionHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,32 @@ public class SplashActivity extends BaseActivity {
             getSupportActionBar().hide();
         }
         fillVersion();
+
+        permissionHelper = new SystemPermissionHelper(this);
+        if (permissionHelper.isAllPermissionGranted()) {
+            startHomeActivity();
+        } else {
+            permissionHelper.requestPermissionsForAll();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == SystemPermissionHelper.PERMISSIONS_FOR_ALL && grantResults[0] != -1) {
+            if (permissionHelper.isAllPermissionGranted()) {
+                startHomeActivity();
+            } else {
+                permissionHelper.requestPermissionsForAll();
+                ToastUtils.shortToast(R.string.need_accept_permissions);
+            }
+        } else {
+            permissionHelper.requestPermissionsForAll();
+            ToastUtils.shortToast(R.string.need_accept_permissions);
+        }
+    }
+
+    private void startHomeActivity() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

@@ -66,6 +66,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.view.ActionMode;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -308,6 +309,14 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
             showContactSelector();
         } else {
             permissionHelper.requestPermissionsForSendSms();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == SystemPermissionHelper.PERMISSIONS_FOR_SEND_SMS_REQUEST && grantResults[0] != -1) {
+            showContactSelector();
         }
     }
 

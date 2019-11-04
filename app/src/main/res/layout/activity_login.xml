@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root_view_login_activity"
     style="@style/MatchParent"
     android:layout_marginLeft="@dimen/login_padding_left_right"
     android:layout_marginRight="@dimen/login_padding_left_right"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_gravity="center_vertical">
 
     <TextView
         android:id="@+id/login_method_view"
@@ -20,7 +22,7 @@
         android:paddingTop="@dimen/login_padding_top"
         android:singleLine="true"
         android:textSize="16sp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/button_login"
@@ -30,5 +32,21 @@
         android:layout_marginTop="5dp"
         android:textColor="@color/white"
         android:layout_height="40dp"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
+
+    <WebView
+        android:id="@+id/webview_privacy"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.9" />
+
+    <CheckBox
+        android:id="@+id/checkbox_privacy"
+        android:text="@string/text_privacy_checkbox"
+        android:textSize="14sp"
+        style="@style/MatchWidth"
+        android:layout_marginBottom="@dimen/margin_bottom_big" />
+
 </LinearLayout>
