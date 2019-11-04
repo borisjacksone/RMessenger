@@ -22,6 +22,10 @@ public class App extends Application {
     public static final boolean AUTO_MARK_DELIVERED = true;
     public static final boolean RECONNECTION_ALLOWED = true;
     public static final boolean ALLOW_LISTEN_NETWORK = true;
+    public static final String LOCALE_EN = "en";
+    public static final String LOCALE_KO = "ko";
+    public static final String CHANNEL_ONE_ID = "com.quickblox.samples.ONE";// The id of the channel.
+    public static final String CHANNEL_ONE_NAME = "Channel One";
 
     //App credentials
     private static final String APPLICATION_ID = "78866";

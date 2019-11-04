@@ -7,6 +7,8 @@ import com.quickblox.core.helper.StringifyArrayList;
 import com.royal.chat.App;
 import com.quickblox.users.model.QBUser;
 
+import java.util.Locale;
+
 public class SharedPrefsHelper {
     private static final String SHARED_PREFS_NAME = "qb";
 
@@ -16,6 +18,7 @@ public class SharedPrefsHelper {
     private static final String QB_USER_FULL_NAME = "qb_user_full_name";
     private static final String QB_USER_TAGS = "qb_user_tags";
     private static final String SAVED_USER_NAME = "user_name";
+    private static final String SAVED_LANG = "lang";
 
     private static SharedPrefsHelper instance;
 
@@ -138,6 +141,23 @@ public class SharedPrefsHelper {
 
     public String getSavedUserName() {
         return readConfig(SAVED_USER_NAME);
+    }
+
+    public void putLocale(String locale) {
+        storeConfig(SAVED_LANG, locale);
+    }
+
+    public String getLocale() {
+        String locale = readConfig(SAVED_LANG);
+        if (locale == null || locale.equals("")) {
+            String defaultLocale = Locale.getDefault().getLanguage();
+            if (!defaultLocale.equals(App.LOCALE_EN) && !defaultLocale.equals(App.LOCALE_KO)) {
+                defaultLocale = App.LOCALE_EN;
+            }
+            return defaultLocale;
+        }
+
+        return locale;
     }
 
     private void storeConfig(String field, String value){

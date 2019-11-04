@@ -16,12 +16,15 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-public class NotificationUtils {
-    private static final String CHANNEL_ONE_ID = "com.quickblox.samples.ONE";// The id of the channel.
-    private static final String CHANNEL_ONE_NAME = "Channel One";
+import com.royal.chat.App;
 
-    public static void showNotification(Context context, Class<? extends Activity> activityClass,
-                                        String title, String message, @DrawableRes int icon,
+public class NotificationUtils {
+
+    public static void showNotification(Context context,
+                                        Class<? extends Activity> activityClass,
+                                        String title,
+                                        String message,
+                                        @DrawableRes int icon,
                                         int notificationId) {
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -30,16 +33,14 @@ public class NotificationUtils {
             createChannelIfNotExist(notificationManager);
         }
         Notification notification = buildNotification(context, activityClass, title, message, icon);
-
         notificationManager.notify(notificationId, notification);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private static void createChannelIfNotExist(NotificationManager notificationManager) {
-        if (notificationManager.getNotificationChannel(CHANNEL_ONE_ID) == null) {
+        if (notificationManager.getNotificationChannel(App.CHANNEL_ONE_ID) == null) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ONE_ID,
-                    CHANNEL_ONE_NAME, importance);
+            NotificationChannel notificationChannel = new NotificationChannel(App.CHANNEL_ONE_ID, App.CHANNEL_ONE_NAME, importance);
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.BLUE);
             notificationChannel.setShowBadge(true);
@@ -52,7 +53,7 @@ public class NotificationUtils {
                                                   String title, String message, @DrawableRes int icon) {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        return new NotificationCompat.Builder(context, CHANNEL_ONE_ID)
+        return new NotificationCompat.Builder(context, App.CHANNEL_ONE_ID)
                 .setSmallIcon(icon)
                 .setContentTitle(title)
                 .setContentText(message)

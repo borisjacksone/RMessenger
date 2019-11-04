@@ -82,7 +82,7 @@
     <string name="chat_empty_start_new_chat">채팅 시작.</string>
     <string name="chat_unsupported_type">형식 오류</string>
     <string name="chat_wait_for_attachments_to_upload">모든 첨부 파일이 업로드 될 때까지 기다립니다.</string>
-    <string name="notification_title">채팅 알림</string>
+    <string name="notification_title">R메신저 알림</string>
     <string name="connection_error">채팅 연결이 끊어졌습니다.</string>
     <string name="update_dialog_error">업데이트 오류</string>
     <string name="reconnect_alert"> %s 초 후에 재접속 합니다.</string>
@@ -150,6 +150,10 @@
     <string name="sms_radio_off">Radio off 상태</string>
     <string name="msg_not_delivered">전송 실패</string>
     <string name="msg_delivery_success">메시지 전송 성공</string>
+    <string name="menu_dialogs_change_language">언 어</string>
+    <string name="text_english">English</string>
+    <string name="text_korean">한국어</string>
+    <string name="text_ok">확 인</string>
     <string name="appinfo_application_description">
         진정한 인스턴트 메신저 — 모든 기기에서 간단하고 빠르며 안전하며 비공개입니다.\n\n
         속 도 : R메신저는 속도가 빠른 메시징 앱으로 전 세계의 고유 한 분산 데이터 센터 네트워크를 통해 사람들을 연결합니다.\n\n

@@ -89,7 +89,9 @@ dependencies {
     implementation "com.quickblox:quickblox-android-sdk-chat:$rootProject.qbSdkVersion"
     implementation "com.quickblox:quickblox-android-sdk-content:$rootProject.qbSdkVersion"
 
+    implementation "com.google.firebase:firebase-analytics:$rootProject.firebaseCoreVersion"
     implementation "com.google.firebase:firebase-core:$rootProject.firebaseCoreVersion"
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation "com.google.android.material:material:$rootProject.materialVersion"
     implementation "androidx.fragment:fragment:$rootProject.fragmentAndroidXVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$rootProject.lifecycleViewmodelAndroidXVersion"

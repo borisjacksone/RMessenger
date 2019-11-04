@@ -82,7 +82,7 @@
     <string name="chat_empty_start_new_chat">Start new chat.</string>
     <string name="chat_unsupported_type">Unsupported dialog type</string>
     <string name="chat_wait_for_attachments_to_upload">Wait for all attachments to upload</string>
-    <string name="notification_title">Quickblox Chat Notification</string>
+    <string name="notification_title">RMessenger Notification</string>
     <string name="connection_error">Chat connection has been dropped</string>
     <string name="update_dialog_error">Update Dialog error</string>
     <string name="reconnect_alert">Reconnecting in %s seconds</string>
@@ -150,6 +150,10 @@
     <string name="sms_radio_off">Radio off</string>
     <string name="msg_not_delivered">Not delivered</string>
     <string name="msg_delivery_success">Message delivered success</string>
+    <string name="menu_dialogs_change_language">Language</string>
+    <string name="text_english">English</string>
+    <string name="text_korean">한국어</string>
+    <string name="text_ok">OK</string>
     <string name="appinfo_application_description">
         True instant messaging — simple, fast, secure, and private across all your devices.\n\n
         FAST: RMessenger is the fastest messaging app on the market, connecting people via a unique, distributed network of data centers around the globe.\n\n

@@ -18,6 +18,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/menu_change_language"
+        android:title="@string/menu_dialogs_change_language"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_appinfo"
         android:title="@string/menu_dialogs_app_info"
         app:showAsAction="never" />

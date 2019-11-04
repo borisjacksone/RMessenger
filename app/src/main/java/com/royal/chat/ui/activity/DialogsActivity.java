@@ -45,6 +45,7 @@ import com.royal.chat.async.BaseAsyncTask;
 import com.royal.chat.managers.DialogsManager;
 import com.royal.chat.ui.adapter.DialogsAdapter;
 import com.royal.chat.ui.dialog.ChangeNameDialog;
+import com.royal.chat.ui.dialog.LanguageDialog;
 import com.royal.chat.ui.dialog.ProgressDialogFragment;
 import com.royal.chat.utils.FcmConsts;
 import com.royal.chat.utils.SharedPrefsHelper;
@@ -285,6 +286,11 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
                     }
                 });
                 changeNameDialog.show();
+                return true;
+
+            case R.id.menu_change_language:
+                LanguageDialog languageDialog = new LanguageDialog(DialogsActivity.this);
+                languageDialog.show();
                 return true;
 
             case R.id.menu_invite_friend:

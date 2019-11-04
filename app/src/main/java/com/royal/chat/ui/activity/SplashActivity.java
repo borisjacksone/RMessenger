@@ -1,20 +1,34 @@
 package com.royal.chat.ui.activity;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+
 import com.quickblox.auth.session.QBSessionManager;
 import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.exception.QBResponseException;
+import com.royal.chat.App;
 import com.royal.chat.R;
 import com.royal.chat.ui.dialog.ProgressDialogFragment;
 import com.royal.chat.utils.SharedPrefsHelper;
 import com.royal.chat.utils.chat.ChatHelper;
 import com.quickblox.users.model.QBUser;
+
+import java.util.Locale;
 
 public class SplashActivity extends BaseActivity {
     private static final int SPLASH_DELAY = 1500;
@@ -25,6 +39,16 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        SharedPrefsHelper sharedPrefsHelper = SharedPrefsHelper.getInstance();
+        String locale = sharedPrefsHelper.getLocale();
+        sharedPrefsHelper.putLocale(locale);
+        setAppLocale(locale);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannelIfNotExist();
+        }
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -40,6 +64,16 @@ public class SplashActivity extends BaseActivity {
                 }
             }
         }, SPLASH_DELAY);
+    }
+
+    private void setAppLocale(String localeCode) {
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            conf.setLocale(new Locale(localeCode.toLowerCase()));
+        }
+        res.updateConfiguration(conf, dm);
     }
 
     @Override
@@ -78,7 +112,7 @@ public class SplashActivity extends BaseActivity {
             ChatHelper.getInstance().destroy();
             return null;
         }
-        Integer userId = qbSessionManager.getSessionParameters().getUserId();
+        int userId = qbSessionManager.getSessionParameters().getUserId();
         user.setId(userId);
         return user;
     }
@@ -112,5 +146,20 @@ public class SplashActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createChannelIfNotExist() {
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager.getNotificationChannel(App.CHANNEL_ONE_ID) == null) {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel notificationChannel = new NotificationChannel(App.CHANNEL_ONE_ID, App.CHANNEL_ONE_NAME, importance);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.BLUE);
+            notificationChannel.setShowBadge(true);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 }
