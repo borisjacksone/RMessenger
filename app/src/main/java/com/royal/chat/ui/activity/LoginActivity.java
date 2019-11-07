@@ -10,12 +10,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,7 +20,6 @@ import com.quickblox.core.helper.StringUtils;
 import com.royal.chat.App;
 import com.royal.chat.R;
 import com.royal.chat.utils.SharedPrefsHelper;
-import com.royal.chat.utils.SystemPermissionHelper;
 import com.royal.chat.utils.ToastUtils;
 import com.royal.chat.utils.chat.ChatHelper;
 import com.quickblox.users.QBUsers;
@@ -35,34 +29,27 @@ public class LoginActivity extends BaseActivity {
     private static final int UNAUTHORIZED = 401;
 
     private String loginID;
-    private EditText usernameEditText;
-    private CheckBox privacyCheckBox;
-    private WebView privacyWebView;
+    private EditText editTextFirstName, editTextLastName;
+    private boolean isFirstOpen = true;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
     }
 
-    @SuppressLint({"HardwareIds", "SetJavaScriptEnabled"})
+    @SuppressLint("HardwareIds")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        privacyCheckBox = findViewById(R.id.checkbox_privacy);
-        privacyWebView = findViewById(R.id.webview_privacy);
-        privacyWebView.getSettings().setJavaScriptEnabled(true);
-        privacyWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-            }
-        });
-        privacyWebView.loadUrl("http://www.google.com");
+        TextView privacyCheckLink = findViewById(R.id.check_link_privacy);
 
-        usernameEditText = findViewById(R.id.user_name);
-        usernameEditText.addTextChangedListener(new TextWatcherListener(usernameEditText));
+        editTextFirstName = findViewById(R.id.user_first_name);
+        editTextLastName = findViewById(R.id.user_last_name);
+
+        editTextFirstName.addTextChangedListener(new TextWatcherListener(editTextFirstName));
+        editTextLastName.addTextChangedListener(new TextWatcherListener(editTextLastName));
 
         loginID = Settings.Secure.getString(LoginActivity.this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
@@ -72,19 +59,31 @@ public class LoginActivity extends BaseActivity {
         final String lastUsedName = SharedPrefsHelper.getInstance().getSavedUserName();
         if (lastUsedName == null || StringUtils.isEmpty(lastUsedName)) {
             textLogin.setText(R.string.login_new_name);
-            usernameEditText.setText("");
-            usernameEditText.setVisibility(View.VISIBLE);
-            privacyWebView.setVisibility(View.VISIBLE);
-            privacyCheckBox.setVisibility(View.VISIBLE);
-            privacyCheckBox.setChecked(false);
+            editTextFirstName.setText("");
+            editTextLastName.setText("");
+            editTextFirstName.setVisibility(View.VISIBLE);
+            editTextLastName.setVisibility(View.VISIBLE);
+            privacyCheckLink.setVisibility(View.VISIBLE);
+            isFirstOpen = true;
             buttonLogin.setVisibility(View.GONE);
+
+            privacyCheckLink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isFirstOpen = false;
+                    Intent intent = new Intent(LoginActivity.this, PrivacyPolicyActivity.class);
+                    startActivity(intent);
+                }
+            });
         } else {
             textLogin.setText(R.string.login_last_name);
-            usernameEditText.setVisibility(View.GONE);
-            usernameEditText.setText(lastUsedName);
-            privacyWebView.setVisibility(View.GONE);
-            privacyCheckBox.setVisibility(View.GONE);
-            privacyCheckBox.setChecked(true);
+            String[] names = lastUsedName.split(" ");
+            editTextFirstName.setVisibility(View.GONE);
+            editTextFirstName.setText(names[0]);
+            editTextLastName.setVisibility(View.GONE);
+            editTextLastName.setText(names[1]);
+            privacyCheckLink.setVisibility(View.GONE);
+            isFirstOpen = false;
             buttonLogin.setVisibility(View.VISIBLE);
 
             buttonLogin.setText(String.format(getString(R.string.login_button_text_format), lastUsedName));
@@ -111,19 +110,26 @@ public class LoginActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_login_user_done:
-                boolean acceptedPrivacy = privacyCheckBox.isChecked();
-                if (!acceptedPrivacy) {
+                if (isFirstOpen) {
                     ToastUtils.longToast(R.string.need_accept_privacy_policy);
                     return false;
                 }
 
-                String userName = usernameEditText.getText().toString();
-                if (StringUtils.isEmpty(userName)) {
+                String userFirstName = editTextFirstName.getText().toString().trim();
+                String userLastName = editTextLastName.getText().toString().trim();
+                if (StringUtils.isEmpty(userFirstName)) {
+                    editTextFirstName.setError(this.getString(R.string.text_required));
                     return false;
                 }
+
+                if (StringUtils.isEmpty(userLastName)) {
+                    editTextLastName.setError(this.getString(R.string.text_required));
+                    return false;
+                }
+
                 QBUser qbUser = new QBUser();
                 qbUser.setLogin(loginID.trim());
-                qbUser.setFullName(usernameEditText.getText().toString().trim());
+                qbUser.setFullName(userFirstName + " " + userLastName);
                 qbUser.setPassword(App.USER_DEFAULT_PASSWORD);
                 signIn(qbUser);
                 invalidateOptionsMenu();

@@ -64,6 +64,17 @@
                 android:value="true" />
         </activity>
 
+        <activity android:name=".ui.activity.PrivacyPolicyActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" android:exported="false">
+            <meta-data
+                android:name="android.webkit.WebView.EnableSafeBrowsing"
+                android:value="true" />
+        </activity>
+
+        <activity android:name=".ui.activity.ProfileActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.activity.ChatInfoActivity"
             android:label="@string/chat_info"

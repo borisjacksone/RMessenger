@@ -3,9 +3,23 @@
     android:id="@+id/msg_widget_attach_left"
     style="@style/ListItemAttachMessage.Left">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/msg_image_avatar"
-        style="@style/AvatarImageViewStyle.Left" />
+    <RelativeLayout
+        style="@style/AvatarLayout">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/msg_image_avatar"
+            style="@style/AvatarImageViewStyle.Left" />
+        <TextView
+            android:id="@+id/msg_name_abbr"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="XX"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:singleLine="true" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/msg_bubble_background"

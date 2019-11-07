@@ -1,6 +1,7 @@
 package com.royal.chat.ui.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +10,25 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.quickblox.chat.QBChatService;
+import com.quickblox.content.QBContent;
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.QBProgressCallback;
+import com.quickblox.core.exception.QBResponseException;
 import com.royal.chat.R;
+import com.royal.chat.ui.activity.ProfileActivity;
+import com.royal.chat.utils.ImageUtils;
 import com.royal.chat.utils.ResourceUtils;
 import com.royal.chat.utils.UiUtils;
 import com.royal.chat.utils.qb.QbDialogUtils;
 import com.quickblox.users.model.QBUser;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UsersAdapter extends BaseAdapter {
 
@@ -47,17 +59,17 @@ public class UsersAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        QBUser user = getItem(position);
+        final QBUser user = getItem(position);
 
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.list_item_user, parent, false);
             holder = new ViewHolder();
-            holder.userImageView = (ImageView) convertView.findViewById(R.id.image_user);
-            holder.loginTextView = (TextView) convertView.findViewById(R.id.text_user_login);
-            holder.userCheckBox = (CheckBox) convertView.findViewById(R.id.checkbox_user);
-            holder.nameAbbrView = (TextView) convertView.findViewById(R.id.nameAbbr);
-            holder.onlineMarkView = (ImageView) convertView.findViewById(R.id.viewOnlineMark);
+            holder.userImageView = convertView.findViewById(R.id.image_user);
+            holder.loginTextView = convertView.findViewById(R.id.text_user_login);
+            holder.userCheckBox = convertView.findViewById(R.id.checkbox_user);
+            holder.nameAbbrView = convertView.findViewById(R.id.nameAbbr);
+            holder.onlineMarkView = convertView.findViewById(R.id.viewOnlineMark);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -79,7 +91,49 @@ public class UsersAdapter extends BaseAdapter {
             holder.loginTextView.setTextColor(ResourceUtils.getColor(R.color.text_color_medium_grey));
         }
 
-        holder.userImageView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(position));
+        if (user.getFileId() == null) {
+            holder.userImageView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(position));
+        } else {
+            holder.nameAbbrView.setVisibility(View.GONE);
+            File imageFile = ImageUtils.getImageFileContent(String.valueOf(user.getId()));
+            if (imageFile == null) {
+                Integer fileId = user.getFileId();
+                Bundle params = new Bundle();
+                QBContent.downloadFileById(fileId, params, new QBProgressCallback() {
+                    @Override
+                    public void onProgressUpdate(int i) {
+
+                    }
+                }).performAsync(new QBEntityCallback<InputStream>() {
+                    @Override
+                    public void onSuccess(InputStream inputStream, Bundle bundle) {
+                        try {
+                            File imageFile = ImageUtils.getImageFileContent(inputStream, String.valueOf(user.getId()));
+                            Glide.with(context)
+                                    .load(imageFile)
+                                    .override(100, 100)
+                                    .dontTransform()
+                                    .error(R.drawable.ic_error)
+                                    .into(holder.userImageView);
+                            inputStream.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(QBResponseException e) {
+                    }
+                });
+            } else {
+                Glide.with(context)
+                        .load(imageFile)
+                        .override(100, 100)
+                        .dontTransform()
+                        .error(R.drawable.ic_error)
+                        .into(holder.userImageView);
+            }
+        }
         holder.userCheckBox.setVisibility(View.GONE);
 
         return convertView;
@@ -109,7 +163,7 @@ public class UsersAdapter extends BaseAdapter {
     }
 
     protected static class ViewHolder {
-        ImageView userImageView;
+        CircleImageView userImageView;
         TextView loginTextView;
         CheckBox userCheckBox;
         TextView nameAbbrView;

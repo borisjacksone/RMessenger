@@ -26,6 +26,7 @@
     <string name="dlg_restoring_chat_session_logout">세션복귀 및 로그아웃</string>
     <string name="create_chat">채팅창조…</string>
     <string name="dlg_login">로그인…</string>
+    <string name="text_required">필 수</string>
     <string name="new_chat_created">%s 님이 새 채팅을 창조 </string>
     <string name="occupant_added">%s 님이 %s 님을 초대</string>
     <string name="occupant_left">%s 님이 나갔습니다</string>
@@ -43,7 +44,7 @@
 
     <string name="login_select_user_for_login">채팅에 로그인 할 사용자를 선택하십시오.</string>
     <string name="login_cant_obtain_users">사용자 오류를 얻을 수 없습니다.</string>
-    <string name="login_chat_login_error">로그인 채팅 오류. 다시 로그인하십시오.</string>
+    <string name="login_chat_login_error">로그인 채팅 오류발생. 다시 로그인하십시오.</string>
     <string name="login_new_name">이름을 입력하고 로그인 하십시오.</string>
     <string name="login_last_name">다음의 계정으로 로그인 하십시오.</string>
     <string name="login_hint_login">로그인</string>
@@ -79,7 +80,7 @@
     <string name="chat_attachment_error">선택한 파일을로드 할 수 없습니다.</string>
     <string name="chat_attachment">첨부파일</string>
     <string name="chat_empty_you_are_alone_here">외롭게 혼자네요.</string>
-    <string name="chat_empty_start_new_chat">채팅 시작.</string>
+    <string name="chat_empty_start_new_chat">채팅 시작</string>
     <string name="chat_unsupported_type">형식 오류</string>
     <string name="chat_wait_for_attachments_to_upload">모든 첨부 파일이 업로드 될 때까지 기다립니다.</string>
     <string name="notification_title">R메신저 알림</string>
@@ -126,13 +127,14 @@
         그런 다음 개요 페이지에서 응용 프로그램 자격 증명을 입력하고 https://admin.quickblox.com/account/settings의 계정 키를 입력하십시오.</string>
     <string name="no_internet_connection">인터넷 오류</string>
     <string name="no_server_connection">서버 연결 시간 초과</string>
-    <string name="error">오 류</string>
+    <string name="error">오류 발생</string>
 
     <string name="login_button_text_format">%s 님으로 계속</string>
-    <string name="menu_dialogs_change_name">이름 변경</string>
+    <string name="menu_dialogs_profile">프로필</string>
     <string name="change_name_fail">이름 변경 실패</string>
     <string name="change_name_success">이름 변경 성공</string>
-    <string name="new_name">이 름(영숫자)…</string>
+    <string name="first_name">성</string>
+    <string name="last_name">이 름</string>
     <string name="enter_new_name">새 이름을 입력하십시오.</string>
     <string name="wait">잠시만 기다려주세요.</string>
     <string name="menu_select_image">이미지</string>
@@ -155,8 +157,18 @@
     <string name="text_korean">한국어</string>
     <string name="text_ok">확 인</string>
     <string name="need_accept_privacy_policy">개인 정보 보호 정책을 수락해야합니다.</string>
-    <string name="text_privacy_checkbox">개인 정보 보호 정책에 동의합니다.</string>
+    <string name="text_privacy_link"><u>개인 정보 보호 정책에 동의합니다.</u></string>
     <string name="need_accept_permissions">권한을 허용해야합니다.</string>
+    <string name="text_invite_sms">R메신저에 가입하여 안전하고 자유롭게 대화하십시오!</string>
+    <string name="menu_select_gallery">갤러리에서 선택</string>
+    <string name="menu_select_camera">사진 찍기</string>
+    <string name="saved_picture">사진이 저장되었습니다.</string>
+    <string name="no_image_selected">이미지 파일이 선택되지 않았습니다.</string>
+    <string name="uploading_profile_image">이미지 업로드 중 입니다.</string>
+    <string name="uploaded_profile_image">이미지 업로드가 성공했습니다.</string>
+    <string name="updating_profile_image">이미지 업데이트 중 입니다.</string>
+    <string name="profile_updated">프로필이 업데이트되었습니다.</string>
+    <string name="updated_profile_image">이미지 업데이트가 성공했습니다.</string>
     <string name="appinfo_application_description">
         진정한 인스턴트 메신저 — 모든 기기에서 간단하고 빠르며 안전하며 비공개입니다.\n\n
         속 도 : R메신저는 속도가 빠른 메시징 앱으로 전 세계의 고유 한 분산 데이터 센터 네트워크를 통해 사람들을 연결합니다.\n\n

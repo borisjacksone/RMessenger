@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -212,5 +213,39 @@ public class ImageUtils {
     private static int dpToPx(int dp) {
         float density = App.getInstance().getResources().getDisplayMetrics().density;
         return Math.round((float)dp * density);
+    }
+
+    public static File getImageFileContent(String fileName) {
+        File imageFile = new File(App.getInstance().getFilesDir().getAbsolutePath() + "/" + fileName + ".jpg");
+        if (imageFile.exists()) {
+            return imageFile;
+        }
+        return null;
+    }
+
+    public static File getImageFileContent(InputStream inputStream, String fileName) {
+        try {
+            File imageFile = new File(App.getInstance().getFilesDir().getAbsolutePath() + "/" + fileName + ".jpg");
+            if (imageFile.exists()) {
+                if (imageFile.delete()) {
+                    imageFile.createNewFile();
+                }
+            } else {
+                imageFile.createNewFile();
+            }
+            OutputStream outputStream = new FileOutputStream(imageFile);
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, read);
+            }
+            outputStream.flush();
+            outputStream.close();
+            inputStream.close();
+            return imageFile;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

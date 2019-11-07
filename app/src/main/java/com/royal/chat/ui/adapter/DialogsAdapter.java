@@ -1,6 +1,7 @@
 package com.royal.chat.ui.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,15 +10,25 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBDialogType;
+import com.quickblox.content.QBContent;
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.QBProgressCallback;
+import com.quickblox.core.exception.QBResponseException;
 import com.royal.chat.R;
+import com.royal.chat.utils.ImageUtils;
 import com.royal.chat.utils.ResourceUtils;
 import com.royal.chat.utils.UiUtils;
 import com.royal.chat.utils.qb.QbDialogUtils;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DialogsAdapter extends BaseAdapter {
     private Context context;
@@ -31,35 +42,78 @@ public class DialogsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.list_item_dialog, parent, false);
 
             holder = new ViewHolder();
-            holder.rootLayout = (ViewGroup) convertView.findViewById(R.id.root);
-            holder.nameTextView = (TextView) convertView.findViewById(R.id.text_dialog_name);
-            holder.lastMessageTextView = (TextView) convertView.findViewById(R.id.text_dialog_last_message);
-            holder.dialogImageView = (ImageView) convertView.findViewById(R.id.image_dialog_icon);
-            holder.unreadCounterTextView = (TextView) convertView.findViewById(R.id.text_dialog_unread_count);
-            holder.onlineMarkView = (ImageView) convertView.findViewById(R.id.viewOnlineMark);
-            holder.nameAbbrView = (TextView) convertView.findViewById(R.id.nameAbbr);
+            holder.rootLayout = convertView.findViewById(R.id.root);
+            holder.nameTextView = convertView.findViewById(R.id.text_dialog_name);
+            holder.lastMessageTextView = convertView.findViewById(R.id.text_dialog_last_message);
+            holder.dialogImageView = convertView.findViewById(R.id.image_dialog_icon);
+            holder.unreadCounterTextView = convertView.findViewById(R.id.text_dialog_unread_count);
+            holder.onlineMarkView = convertView.findViewById(R.id.viewOnlineMark);
+            holder.nameAbbrView = convertView.findViewById(R.id.nameAbbr);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        QBChatDialog dialog = getItem(position);
+        final QBChatDialog dialog = getItem(position);
         if (dialog.getType().equals(QBDialogType.GROUP)) {
             holder.dialogImageView.setBackgroundDrawable(UiUtils.getGreyCircleDrawable());
             holder.dialogImageView.setImageResource(R.drawable.ic_chat_group);
             holder.onlineMarkView.setVisibility(View.GONE);
             holder.nameAbbrView.setVisibility(View.GONE);
         } else {
-            holder.dialogImageView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(position));
-            holder.dialogImageView.setImageDrawable(null);
+            if (QbDialogUtils.getDialogFileId(dialog) == null) {
+                holder.dialogImageView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(position));
+                holder.dialogImageView.setImageDrawable(null);
+                holder.nameAbbrView.setVisibility(View.VISIBLE);
+            } else {
+                holder.nameAbbrView.setVisibility(View.GONE);
+                File imageFile = ImageUtils.getImageFileContent(String.valueOf(dialog.getRecipientId()));
+                if (imageFile == null) {
+                    Integer fileId = QbDialogUtils.getDialogFileId(dialog);
+                    Bundle params = new Bundle();
+                    QBContent.downloadFileById(fileId, params, new QBProgressCallback() {
+                        @Override
+                        public void onProgressUpdate(int i) {
+
+                        }
+                    }).performAsync(new QBEntityCallback<InputStream>() {
+                        @Override
+                        public void onSuccess(InputStream inputStream, Bundle bundle) {
+                            try {
+                                File imageFile = ImageUtils.getImageFileContent(inputStream, String.valueOf(dialog.getRecipientId()));
+                                Glide.with(context)
+                                        .load(imageFile)
+                                        .override(100, 100)
+                                        .dontTransform()
+                                        .error(R.drawable.ic_error)
+                                        .into(holder.dialogImageView);
+                                inputStream.close();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError(QBResponseException e) {
+                        }
+                    });
+                } else {
+                    Glide.with(context)
+                            .load(imageFile)
+                            .override(100, 100)
+                            .dontTransform()
+                            .error(R.drawable.ic_error)
+                            .into(holder.dialogImageView);
+                }
+            }
+
             holder.onlineMarkView.setVisibility(View.VISIBLE);
-            holder.nameAbbrView.setVisibility(View.VISIBLE);
         }
 
         holder.nameTextView.setText(QbDialogUtils.getDialogName(dialog));
@@ -155,7 +209,7 @@ public class DialogsAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         ViewGroup rootLayout;
-        ImageView dialogImageView;
+        CircleImageView dialogImageView;
         ImageView onlineMarkView;
         TextView nameTextView;
         TextView lastMessageTextView;

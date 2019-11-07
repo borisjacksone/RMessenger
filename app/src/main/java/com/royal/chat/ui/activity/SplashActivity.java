@@ -75,11 +75,9 @@ public class SplashActivity extends BaseActivity {
                 startHomeActivity();
             } else {
                 permissionHelper.requestPermissionsForAll();
-                ToastUtils.shortToast(R.string.need_accept_permissions);
             }
         } else {
             permissionHelper.requestPermissionsForAll();
-            ToastUtils.shortToast(R.string.need_accept_permissions);
         }
     }
 

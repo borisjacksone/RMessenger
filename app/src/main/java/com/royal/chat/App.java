@@ -14,6 +14,7 @@ public class App extends Application {
 
     //Chat settings
     public static final String USER_DEFAULT_PASSWORD = "quickblox";
+    public static final int USER_DEFAULT_IMAGE = -1;
     public static final int CHAT_PORT = 5223;
     public static final int SOCKET_TIMEOUT = 300;
     public static final boolean KEEP_ALIVE = true;

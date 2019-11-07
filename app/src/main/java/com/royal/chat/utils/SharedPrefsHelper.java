@@ -17,6 +17,7 @@ public class SharedPrefsHelper {
     private static final String QB_USER_PASSWORD = "qb_user_password";
     private static final String QB_USER_FULL_NAME = "qb_user_full_name";
     private static final String QB_USER_TAGS = "qb_user_tags";
+    private static final String QB_USER_IMAGE = "qb_user_image";
     private static final String SAVED_USER_NAME = "user_name";
     private static final String SAVED_LANG = "lang";
 
@@ -85,6 +86,8 @@ public class SharedPrefsHelper {
         save(QB_USER_LOGIN, qbUser.getLogin());
         save(QB_USER_PASSWORD, qbUser.getPassword());
         save(QB_USER_FULL_NAME, qbUser.getFullName());
+        Integer fileID = qbUser.getFileId();
+        save(QB_USER_IMAGE, qbUser.getFileId());
         save(QB_USER_TAGS, qbUser.getTags().getItemsAsString());
         putUserName(qbUser.getFullName());
     }
@@ -94,6 +97,7 @@ public class SharedPrefsHelper {
         delete(QB_USER_LOGIN);
         delete(QB_USER_PASSWORD);
         delete(QB_USER_FULL_NAME);
+        delete(QB_USER_IMAGE);
         delete(QB_USER_TAGS);
     }
 
@@ -103,6 +107,8 @@ public class SharedPrefsHelper {
             String login = get(QB_USER_LOGIN);
             String password = get(QB_USER_PASSWORD);
             String fullName = get(QB_USER_FULL_NAME);
+            Integer fileID = get(QB_USER_IMAGE);
+
             String tagsInString = get(QB_USER_TAGS);
 
             StringifyArrayList<String> tags = null;
@@ -115,6 +121,7 @@ public class SharedPrefsHelper {
             QBUser user = new QBUser(login, password);
             user.setId(id);
             user.setFullName(fullName);
+            user.setFileId(fileID);
             user.setTags(tags);
             return user;
         } else {

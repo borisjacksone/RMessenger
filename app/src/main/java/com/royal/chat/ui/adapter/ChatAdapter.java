@@ -1,6 +1,7 @@
 package com.royal.chat.ui.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -20,12 +21,18 @@ import com.bumptech.glide.request.target.Target;
 import com.quickblox.chat.model.QBAttachment;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBChatMessage;
+import com.quickblox.content.QBContent;
 import com.quickblox.content.model.QBFile;
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.QBProgressCallback;
+import com.quickblox.core.exception.QBResponseException;
 import com.quickblox.core.helper.CollectionsUtil;
 import com.royal.chat.R;
 import com.royal.chat.managers.DialogsManager;
+import com.royal.chat.ui.activity.ProfileActivity;
 import com.royal.chat.ui.adapter.listeners.AttachClickListener;
 import com.royal.chat.ui.adapter.listeners.MessageLinkClickListener;
+import com.royal.chat.utils.ImageUtils;
 import com.royal.chat.utils.LinkUtils;
 import com.royal.chat.utils.MessageTextClickMovement;
 import com.royal.chat.utils.TimeUtils;
@@ -39,6 +46,8 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 
+import java.io.File;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,6 +58,8 @@ import java.util.Locale;
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHolder> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
@@ -277,6 +288,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     private void onBindViewMsgLeftHolder(TextMessageHolder holder, QBChatMessage chatMessage, int position) {
         holder.messageTimeTextView.setVisibility(View.GONE);
         setOpponentsName(holder, chatMessage, false);
+        setOpponentsAvatar(holder, chatMessage);
 
         TextView customMessageTimeTextView = holder.itemView.findViewById(R.id.custom_msg_text_time_message);
         customMessageTimeTextView.setText(getTime(chatMessage.getDateSent()));
@@ -290,6 +302,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
     private void onBindViewAttachLeftHolder(ImageAttachHolder holder, QBChatMessage chatMessage, int position) {
         setOpponentsName(holder, chatMessage, true);
+        setOpponentsAvatar(holder, chatMessage);
+
         fillAttachmentHolder(holder, chatMessage, position, true);
         setItemAttachClickListener(getAttachListenerByType(position), holder, getAttachment(position), position);
     }
@@ -300,6 +314,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
     private void onBindViewAttachLeftHolder(AudioAttachHolder holder, QBChatMessage chatMessage, int position) {
         setOpponentsName(holder, chatMessage, true);
+        setOpponentsAvatar(holder, chatMessage);
+
         fillAttachmentHolder(holder, chatMessage, position, true);
 //        setItemAttachClickListener(getAttachListenerByType(position), holder, getAttachment(position), position);
     }
@@ -399,6 +415,58 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         opponentNameTextView.setText(getSenderName(chatMessage));
     }
 
+    private void setOpponentsAvatar(MessageViewHolder holder, final QBChatMessage chatMessage) {
+        Integer fileId = getSenderFileId(chatMessage);
+        final CircleImageView avatarView = holder.avatar;
+        final TextView nameAbbr = holder.nameAbbr;
+        if (fileId == null) {
+            avatarView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(chatMessage.getSenderId()));
+            avatarView.setImageDrawable(null);
+            nameAbbr.setVisibility(View.VISIBLE);
+            nameAbbr.setText(UiUtils.getFirstTwoCharacters(getSenderName(chatMessage)));
+        } else {
+            nameAbbr.setVisibility(View.GONE);
+            File imageFile = ImageUtils.getImageFileContent(String.valueOf(chatMessage.getSenderId()));
+            if (imageFile == null) {
+                Bundle params = new Bundle();
+                QBContent.downloadFileById(fileId, params, new QBProgressCallback() {
+                    @Override
+                    public void onProgressUpdate(int i) {
+
+                    }
+                }).performAsync(new QBEntityCallback<InputStream>() {
+                    @Override
+                    public void onSuccess(InputStream inputStream, Bundle bundle) {
+                        try {
+                            File imageFile = ImageUtils.getImageFileContent(inputStream, String.valueOf(chatMessage.getSenderId()));
+                            Glide.with(context)
+                                    .load(imageFile)
+                                    .override(100, 100)
+                                    .dontTransform()
+                                    .error(R.drawable.ic_error)
+                                    .into(avatarView);
+                            inputStream.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(QBResponseException e) {
+
+                    }
+                });
+            } else {
+                Glide.with(context)
+                        .load(imageFile)
+                        .override(100, 100)
+                        .dontTransform()
+                        .error(R.drawable.ic_error)
+                        .into(avatarView);
+            }
+        }
+    }
+
     private String getSenderName(QBChatMessage chatMessage) {
         QBUser sender = QbUsersHolder.getInstance().getUserById(chatMessage.getSenderId());
         String fullName = "";
@@ -406,6 +474,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
             fullName = sender.getFullName();
         }
         return fullName;
+    }
+
+    private Integer getSenderFileId(QBChatMessage chatMessage) {
+        QBUser sender = QbUsersHolder.getInstance().getUserById(chatMessage.getSenderId());
+        Integer fileId = null;
+        if (sender != null) {
+            fileId = sender.getFileId();
+        }
+        return fileId;
     }
 
     private void readMessage(QBChatMessage chatMessage) {
@@ -756,12 +833,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     }
 
     public abstract static class MessageViewHolder extends RecyclerView.ViewHolder {
-        public ImageView avatar;
+        public CircleImageView avatar;
+        public TextView nameAbbr;
         public View bubbleFrame;
 
         private MessageViewHolder(View itemView) {
             super(itemView);
             avatar = itemView.findViewById(R.id.msg_image_avatar);
+            nameAbbr = itemView.findViewById(R.id.msg_name_abbr);
             bubbleFrame = itemView.findViewById(R.id.msg_bubble_background);
         }
     }

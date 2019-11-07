@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.os.StrictMode;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +36,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         actionBar = getSupportActionBar();
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 
     @Override
@@ -46,8 +50,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void showErrorSnackbar(@StringRes int resId, Exception e, View.OnClickListener clickListener) {
         View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
         if (rootView != null) {
-            ErrorUtils.showSnackbar(rootView, resId, e,
-                    R.string.dialog_retry, clickListener).show();
+            e.printStackTrace();
+//            ErrorUtils.showSnackbar(rootView, resId, e, R.string.dialog_retry, clickListener).show();
         }
     }
 

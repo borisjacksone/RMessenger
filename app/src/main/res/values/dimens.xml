@@ -66,11 +66,11 @@
     <dimen name="vd_playpause_play_height">26dp</dimen>
 
     <dimen name="corners_small_value">3dp</dimen>
-    <dimen name="image_view_small_avatar_layout_width">48dp</dimen>
-    <dimen name="image_view_small_avatar_layout_height">48dp</dimen>
+    <dimen name="image_view_small_avatar_layout_width">40dp</dimen>
+    <dimen name="image_view_small_avatar_layout_height">40dp</dimen>
     <dimen name="image_view_big_avatar_layout_width">72dp</dimen>
     <dimen name="image_view_big_avatar_layout_height">72dp</dimen>
-    <dimen name="avatar_border_width">1dp</dimen>
+    <dimen name="avatar_border_width">0.5dp</dimen>
 
     <dimen name="host_icon_width">12dp</dimen>
     <dimen name="host_icon_height">12dp</dimen>

@@ -116,6 +116,21 @@ public class QbDialogUtils {
         }
     }
 
+    public static Integer getDialogFileId(QBChatDialog dialog) {
+        if (dialog.getType().equals(QBDialogType.GROUP)) {
+            return null;
+        } else {
+            // It's a private dialog, let's use opponent's name as chat name
+            Integer opponentId = dialog.getRecipientId();
+            QBUser user = QbUsersHolder.getInstance().getUserById(opponentId);
+            if (user != null) {
+                return user.getFileId();
+            } else {
+                return null;
+            }
+        }
+    }
+
     public static boolean isOnline(QBChatDialog dialog) {
         if (dialog.getType().equals(QBDialogType.GROUP)) {
             return false;

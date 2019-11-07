@@ -92,9 +92,7 @@ public class SmsHelper {
             return;
         }
 
-        ToastUtils.longToast(phoneNumber);
-
-        String message = "Hello, guys!";
+        String message = context.getString(R.string.text_invite_sms);
 
         SmsManager smsManager = SmsManager.getDefault();
         List<String> messages = smsManager.divideMessage(message);

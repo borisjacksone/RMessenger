@@ -14,15 +14,37 @@
         android:paddingTop="@dimen/login_padding_actionbar"
         android:text="@string/login_new_name" />
 
-    <EditText
-        android:id="@+id/user_name"
-        style="@style/MatchWidth"
-        android:hint="@string/login_hint_username"
-        android:maxLength="15"
-        android:paddingTop="@dimen/login_padding_top"
-        android:singleLine="true"
-        android:textSize="16sp"
-        android:visibility="visible" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/user_first_name"
+            style="@style/WrapContent"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:hint="@string/first_name"
+            android:layout_margin="5dp"
+            android:maxLength="10"
+            android:paddingTop="@dimen/login_padding_top"
+            android:singleLine="true"
+            android:textSize="16sp"
+            android:visibility="visible" />
+
+        <EditText
+            android:id="@+id/user_last_name"
+            style="@style/WrapContent"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:hint="@string/last_name"
+            android:layout_margin="5dp"
+            android:maxLength="10"
+            android:paddingTop="@dimen/login_padding_top"
+            android:singleLine="true"
+            android:textSize="16sp"
+            android:visibility="visible" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/button_login"
@@ -34,19 +56,12 @@
         android:layout_height="40dp"
         android:visibility="gone"/>
 
-    <WebView
-        android:id="@+id/webview_privacy"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.9" />
-
-    <CheckBox
-        android:id="@+id/checkbox_privacy"
-        android:text="@string/text_privacy_checkbox"
+    <TextView
+        android:id="@+id/check_link_privacy"
+        android:text="@string/text_privacy_link"
         android:textSize="14sp"
-        style="@style/MatchWidth"
-        android:layout_marginBottom="@dimen/margin_bottom_big" />
+        android:textColor="@color/color_blue_qb"
+        android:layout_marginTop="@dimen/activity_margin"
+        style="@style/MatchWidth" />
 
 </LinearLayout>

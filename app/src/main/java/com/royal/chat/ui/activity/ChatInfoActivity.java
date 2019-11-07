@@ -52,7 +52,6 @@ public class ChatInfoActivity extends BaseActivity {
 
             @Override
             public void onError(QBResponseException e) {
-                ToastUtils.shortToast(e.getMessage());
                 finish();
             }
         });

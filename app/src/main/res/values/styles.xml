@@ -238,13 +238,19 @@
         <item name="android:scaleType">fitCenter</item>
     </style>
 
-    <style name="AvatarImageViewStyle">
+    <style name="AvatarLayout">
         <item name="android:layout_width">@dimen/image_view_small_avatar_layout_width</item>
         <item name="android:layout_height">@dimen/image_view_small_avatar_layout_width</item>
         <item name="android:layout_gravity">bottom</item>
+    </style>
+
+    <style name="AvatarImageViewStyle">
+        <item name="android:layout_width">@dimen/image_view_small_avatar_layout_width</item>
+        <item name="android:layout_height">@dimen/image_view_small_avatar_layout_width</item>
+        <item name="android:layout_centerInParent">true</item>
         <item name="android:src">@drawable/placeholder_user</item>
         <item name="civ_border_width">@dimen/avatar_border_width</item>
-        <item name="civ_border_color">@color/dark_gray</item>
+        <item name="civ_border_color">@color/text_color_light_grey</item>
     </style>
 
     <style name="WidgetTextMessage.Right" />

@@ -20,8 +20,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
@@ -44,7 +42,6 @@ import com.royal.chat.R;
 import com.royal.chat.async.BaseAsyncTask;
 import com.royal.chat.managers.DialogsManager;
 import com.royal.chat.ui.adapter.DialogsAdapter;
-import com.royal.chat.ui.dialog.ChangeNameDialog;
 import com.royal.chat.ui.dialog.LanguageDialog;
 import com.royal.chat.ui.dialog.ProgressDialogFragment;
 import com.royal.chat.utils.FcmConsts;
@@ -52,7 +49,6 @@ import com.royal.chat.utils.SharedPrefsHelper;
 import com.royal.chat.utils.SmsHelper;
 import com.royal.chat.utils.SystemPermissionHelper;
 import com.royal.chat.utils.ToastUtils;
-import com.royal.chat.utils.audiopick.AudioPickHelper;
 import com.royal.chat.utils.chat.ChatHelper;
 import com.royal.chat.utils.qb.QbChatDialogMessageListenerImp;
 import com.royal.chat.utils.qb.QbDialogHolder;
@@ -194,6 +190,10 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
     protected void onResume() {
         super.onResume();
         SmsHelper.getInstance(DialogsActivity.this).registerReceiver();
+
+        if (actionBar != null) {
+            actionBar.setTitle(getString(R.string.dialogs_logged_in_as, ChatHelper.getCurrentUser().getFullName()));
+        }
     }
 
     @Override
@@ -275,18 +275,12 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
                 AppInfoActivity.start(this);
                 return true;
 
-            case R.id.menu_change_name:
+            case R.id.menu_profile:
                 if (ChatHelper.getCurrentUser() == null) {
                     return super.onOptionsItemSelected(item);
                 }
-                ChangeNameDialog changeNameDialog = new ChangeNameDialog(DialogsActivity.this, ChatHelper.getCurrentUser().getFullName());
-                changeNameDialog.setDialogResult(new ChangeNameDialog.OnChangeNameResult() {
-                    @Override
-                    public void finish(String result) {
-                        changeUserName(result);
-                    }
-                });
-                changeNameDialog.show();
+                Intent intent = new Intent(DialogsActivity.this, ProfileActivity.class);
+                startActivity(intent);
                 return true;
 
             case R.id.menu_change_language:
@@ -324,32 +318,6 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
         startActivityForResult(intent, REQUEST_SELECT_CONTACT);
-    }
-
-    private void changeUserName(String name) {
-        QBUser user = ChatHelper.getCurrentUser();
-        user.setPassword(null);
-        user.setFullName(name.trim());
-        ToastUtils.longToast(R.string.wait);
-
-        ChatHelper.getInstance().updateUser(user, new QBEntityCallback<QBUser>() {
-            @Override
-            public void onSuccess(QBUser user, Bundle bundle) {
-                ToastUtils.longToast(R.string.change_name_success);
-
-                SharedPrefsHelper.getInstance().saveQbUser(user);
-
-                if (actionBar != null) {
-                    actionBar.setTitle(getString(R.string.dialogs_logged_in_as, user.getFullName()));
-                }
-            }
-
-            @Override
-            public void onError(QBResponseException e) {
-                ToastUtils.longToast(R.string.change_name_fail);
-                e.printStackTrace();
-            }
-        });
     }
 
     @SuppressWarnings("unchecked")
@@ -580,7 +548,6 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
             @Override
             public void onError(QBResponseException e) {
                 disableProgress();
-                ToastUtils.shortToast(e.getMessage());
             }
         });
     }
@@ -756,7 +723,6 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
         public void onException(Exception e) {
             super.onException(e);
             Log.d(TAG, "Error: " + e);
-            ToastUtils.shortToast("Error: " + e.getMessage());
         }
     }
 }

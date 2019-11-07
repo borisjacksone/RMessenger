@@ -47,7 +47,8 @@ public class UiUtils {
         if (name == null || StringUtils.isEmpty(name)) {
             return result;
         }
-        result = name.substring(0, 2).toUpperCase();
+        String[] names = name.split(" ");
+        result = String.valueOf(names[0].charAt(0)).toUpperCase() + String.valueOf(names[1].charAt(0)).toUpperCase();
         return result;
     }
 
@@ -56,6 +57,8 @@ public class UiUtils {
         drawable.setColor(color);
         return drawable;
     }
+
+
 
     public static int getRandomCircleColor() {
         int randomNumber = random.nextInt(RANDOM_COLOR_END_RANGE) + 1;
