@@ -23,7 +23,7 @@
 
     <RelativeLayout
         android:id="@+id/msg_bubble_background"
-        style="@style/BubbleAttachAudioFrame.Left">
+        style="@style/BubbleAttachAudioFrameLeft">
 
         <WebView
             android:id="@+id/msg_audio_attach"

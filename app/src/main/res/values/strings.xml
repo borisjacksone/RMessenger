@@ -135,12 +135,11 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="text_required">Required</string>
-    <string name="enter_new_name">Enter new name.</string>
     <string name="wait">Hold on a moment, please.</string>
     <string name="menu_select_image">Image</string>
     <string name="menu_select_audio">Audio</string>
     <string name="dialog_choose_audio_from">Select audio from…</string>
-    <string name="text_duration">Length&#160;:&#160;</string>
+    <string name="text_duration">Len&#160;:&#160;</string>
     <string name="record_result_format">%02ds\nRec File</string>
     <string name="menu_dialogs_invite_friend">Invite friend</string>
     <string name="phone_not_selected">Phone number is not selected.</string>
