@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -215,7 +217,7 @@ public class ImageUtils {
         return Math.round((float)dp * density);
     }
 
-    public static File getImageFileContent(String fileName) {
+    public static File getExistImageFile(String fileName) {
         File imageFile = new File(App.getInstance().getFilesDir().getAbsolutePath() + "/" + fileName + ".jpg");
         if (imageFile.exists()) {
             return imageFile;
@@ -247,5 +249,38 @@ public class ImageUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static boolean removeCachedImages() {
+        try {
+            boolean cleaned = true;
+            File folder = new File(App.getInstance().getFilesDir().getAbsolutePath());
+            if (folder.exists() && folder.isDirectory()) {
+                File[] files = folder.listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        return name.contains(".jpg");
+                    }
+                });
+                for (File file : files) {
+                    if (!file.delete()) {
+                        cleaned = false;
+                    }
+                }
+                return cleaned;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static void showImageFile(File imageFile, ImageView imageView) {
+        if (imageFile.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+            imageView.setImageBitmap(bitmap);
+        } else {
+            imageView.setImageDrawable(App.getInstance().getResources().getDrawable(R.drawable.ic_error));
+        }
     }
 }

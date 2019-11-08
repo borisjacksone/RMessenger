@@ -163,12 +163,17 @@
     <string name="menu_select_gallery">Choose from Gallery</string>
     <string name="menu_select_camera">Take a picture</string>
     <string name="profile_updated">Your profile is updated.</string>
-    <string name="saved_picture">Picture is saved.</string>
+    <string name="selected_picture">Picture is selected.</string>
     <string name="no_image_selected">No image file is selected.</string>
     <string name="uploading_profile_image">Wait for uploading image.</string>
     <string name="uploaded_profile_image">Uploading image is success.</string>
     <string name="updating_profile_image">Wait for updating image.</string>
     <string name="updated_profile_image">Updating image is success.</string>
+    <string name="cleaned_cache">Cached data has been cleaned up.</string>
+    <string name="text_confirm_dialog_title">Information</string>
+    <string name="text_comfirm_exit">Do you really want to exit RMessenger?</string>
+    <string name="text_yes">Yes</string>
+    <string name="text_no">No</string>
     <string name="appinfo_application_description">
         True instant messaging — simple, fast, secure, and private across all your devices.\n\n
         FAST: RMessenger is the fastest messaging app on the market, connecting people via a unique, distributed network of data centers around the globe.\n\n

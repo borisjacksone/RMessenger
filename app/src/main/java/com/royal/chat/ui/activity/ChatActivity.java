@@ -36,6 +36,7 @@ import com.royal.chat.ui.adapter.ChatAdapter;
 import com.royal.chat.ui.adapter.listeners.AttachClickListener;
 import com.royal.chat.ui.dialog.ProgressDialogFragment;
 import com.royal.chat.ui.widget.AttachmentPreviewAdapterView;
+import com.royal.chat.utils.GetImageFileListener;
 import com.royal.chat.utils.SharedPrefsHelper;
 import com.royal.chat.utils.SystemPermissionHelper;
 import com.royal.chat.utils.ToastUtils;
@@ -69,7 +70,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ChatActivity extends BaseActivity implements OnImagePickedListener, OnAudioPickedListener, QBMessageStatusListener, DialogsManager.ManagingDialogsCallbacks {
+public class ChatActivity extends BaseActivity implements OnImagePickedListener, OnAudioPickedListener, QBMessageStatusListener, DialogsManager.ManagingDialogsCallbacks, GetImageFileListener {
     private static final String TAG = ChatActivity.class.getSimpleName();
     private static final int MAX_UPLOAD_FILES = 1;
     private static final int REQUEST_CODE_ATTACHMENT = 721;
@@ -104,6 +105,16 @@ public class ChatActivity extends BaseActivity implements OnImagePickedListener,
     private int skipPagination = 0;
     private ChatMessageListener chatMessageListener;
     private boolean checkAdapterInit;
+
+    private Runnable notifyDataSetChangedThread = new Runnable() {
+        @Override
+        public void run() {
+            if (chatAdapter == null) {
+                return;
+            }
+            chatAdapter.notifyDataSetChanged();
+        }
+    };
 
     public static void startForResult(Activity activity, int code, QBChatDialog dialogId) {
         Intent intent = new Intent(activity, ChatActivity.class);
@@ -607,7 +618,7 @@ public class ChatActivity extends BaseActivity implements OnImagePickedListener,
         chatMessagesRecyclerView.setLayoutManager(layoutManager);
 
         messagesList = new ArrayList<>();
-        chatAdapter = new ChatAdapter(this, qbChatDialog, messagesList);
+        chatAdapter = new ChatAdapter(this, qbChatDialog, messagesList, this);
         chatAdapter.setPaginationHistoryListener(new PaginationListener());
         chatMessagesRecyclerView.addItemDecoration(
                 new StickyRecyclerHeadersDecoration(chatAdapter));
@@ -895,6 +906,24 @@ public class ChatActivity extends BaseActivity implements OnImagePickedListener,
 
     @Override
     public void onNewDialogLoaded(QBChatDialog chatDialog) {
+
+    }
+
+    @Override
+    public void onImageFileShowReady(File file) {
+        if (file == null) {
+            return;
+        }
+        runOnUiThread(notifyDataSetChangedThread);
+    }
+
+    @Override
+    public void onImageFileUploadReady(File file) {
+
+    }
+
+    @Override
+    public void onImageFileUpdateReady(File file) {
 
     }
 

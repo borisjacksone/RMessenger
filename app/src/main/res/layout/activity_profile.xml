@@ -27,6 +27,15 @@
                 app:civ_border_width="0.5dp"
                 app:civ_border_color="@color/text_color_light_grey" />
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profileEditImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                app:srcCompat="@drawable/edit_profile" />
+
             <TextView
                 android:id="@+id/nameAbbr"
                 android:layout_centerInParent="true"
@@ -41,31 +50,58 @@
 
         </RelativeLayout>
 
-        <EditText
-            android:id="@+id/edittext_user_first_name"
-            style="@style/MatchWidth"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/first_name"
-            android:maxLength="15"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:orientation="horizontal"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:singleLine="true" />
+            android:padding="20dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:textSize="16sp"
+                android:text="@string/first_name"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:textColor="@color/dark_gray"/>
+            <EditText
+                android:id="@+id/edittext_user_first_name"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/first_name"
+                android:maxLength="10"
+                android:singleLine="true" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/edittext_user_last_name"
-            style="@style/MatchWidth"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/last_name"
-            android:maxLength="15"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:singleLine="true" />
+            android:orientation="horizontal"
+            android:padding="20dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:textSize="16sp"
+                android:text="@string/last_name"
+                android:gravity="center"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/dark_gray"/>
+            <EditText
+                android:id="@+id/edittext_user_last_name"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:hint="@string/last_name"
+                android:gravity="center"
+                android:maxLength="10"
+                android:singleLine="true" />
+        </LinearLayout>
     </LinearLayout>
 
     <Button

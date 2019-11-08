@@ -19,7 +19,6 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 
-import com.bumptech.glide.Glide;
 import com.quickblox.content.QBContent;
 import com.quickblox.content.model.QBFile;
 import com.quickblox.core.QBEntityCallback;
@@ -28,6 +27,8 @@ import com.quickblox.core.exception.QBResponseException;
 import com.quickblox.core.helper.StringUtils;
 import com.quickblox.users.model.QBUser;
 import com.royal.chat.R;
+import com.royal.chat.utils.GetImageFileListener;
+import com.royal.chat.utils.GetImageFileTask;
 import com.royal.chat.utils.ImageUtils;
 import com.royal.chat.utils.ResourceUtils;
 import com.royal.chat.utils.SharedPrefsHelper;
@@ -40,9 +41,10 @@ import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileActivity extends BaseActivity {
+public class ProfileActivity extends BaseActivity implements GetImageFileListener {
 
     private CircleImageView imageView;
+    private CircleImageView editImageView;
     private TextView nameAbbr;
     private EditText editFirstName;
     private EditText editLastName;
@@ -65,10 +67,13 @@ public class ProfileActivity extends BaseActivity {
 
     private void initViews(final QBUser oldUser) {
         imageView = findViewById(R.id.profileImage);
+        editImageView = findViewById(R.id.profileEditImage);
         nameAbbr = findViewById(R.id.nameAbbr);
         editFirstName = findViewById(R.id.edittext_user_first_name);
         editLastName = findViewById(R.id.edittext_user_last_name);
         buttonOK = findViewById(R.id.button_ok);
+
+        editImageView.setImageDrawable(getResources().getDrawable(R.drawable.edit_profile));
 
         editFirstName.addTextChangedListener(new TextWatcherListener(editFirstName));
         editLastName.addTextChangedListener(new TextWatcherListener(editLastName));
@@ -77,18 +82,17 @@ public class ProfileActivity extends BaseActivity {
         String[] names = fullName.split(" ");
 
         if (oldUser.getFileId() == null) {
-            imageView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(0));
-            nameAbbr.setVisibility(View.VISIBLE);
-            nameAbbr.setText(UiUtils.getFirstTwoCharacters(fullName));
+            showDefaultAvatar(fullName);
         } else {
-            nameAbbr.setVisibility(View.GONE);
+            showDefaultAvatar(fullName);
 
-            File imageFile = ImageUtils.getImageFileContent(String.valueOf(oldUser.getId()));
+            File imageFile = ImageUtils.getExistImageFile(String.valueOf(oldUser.getId()));
             if (imageFile == null) {
                 int fileId = oldUser.getFileId();
                 Bundle params = new Bundle();
 
                 showProgressDialog(R.string.wait);
+
                 QBContent.downloadFileById(fileId, params, new QBProgressCallback() {
                     @Override
                     public void onProgressUpdate(int i) {
@@ -97,19 +101,8 @@ public class ProfileActivity extends BaseActivity {
                 }).performAsync(new QBEntityCallback<InputStream>() {
                     @Override
                     public void onSuccess(InputStream inputStream, Bundle bundle) {
-                        try {
-                            File imageFile = ImageUtils.getImageFileContent(inputStream, String.valueOf(oldUser.getId()));
-                            Glide.with(ProfileActivity.this)
-                                    .load(imageFile)
-                                    .override(100, 100)
-                                    .dontTransform()
-                                    .error(R.drawable.ic_error)
-                                    .into(imageView);
-                            inputStream.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        hideProgressDialog();
+                        GetImageFileTask task = new GetImageFileTask(ProfileActivity.this, GetImageFileTask.SHOW_IMAGE);
+                        task.execute(inputStream, String.valueOf(oldUser.getId()));
                     }
 
                     @Override
@@ -118,12 +111,8 @@ public class ProfileActivity extends BaseActivity {
                     }
                 });
             } else {
-                Glide.with(ProfileActivity.this)
-                        .load(imageFile)
-                        .override(100, 100)
-                        .dontTransform()
-                        .error(R.drawable.ic_error)
-                        .into(imageView);
+                ImageUtils.showImageFile(imageFile, imageView);
+                nameAbbr.setVisibility(View.GONE);
             }
         }
 
@@ -172,122 +161,71 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    private void showDefaultAvatar(String fullName) {
+        imageView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(0));
+        imageView.setImageDrawable(null);
+        nameAbbr.setVisibility(View.VISIBLE);
+        nameAbbr.setText(UiUtils.getFirstTwoCharacters(fullName));
+    }
+
+    private void showWaitStatus(int stringID) {
+        buttonOK.setEnabled(false);
+        showProgressDialog(R.string.wait);
+        ToastUtils.longToast(stringID);
+    }
+
+    private void showErrorStatus(Exception e) {
+        if (e != null) {
+            e.printStackTrace();
+        }
+        hideProgressDialog();
+        buttonOK.setEnabled(true);
+        imageUri = null;
+        ToastUtils.longToast(R.string.error);
+    }
+
+    private void showSuccessStatus(int stringID) {
+        hideProgressDialog();
+        buttonOK.setEnabled(true);
+        imageUri = null;
+        ToastUtils.longToast(stringID);
+    }
+
     private void updateUser(final QBUser user) {
         showProgressDialog(R.string.wait);
         ChatHelper.getInstance().updateUser(user, new QBEntityCallback<QBUser>() {
             @Override
             public void onSuccess(QBUser user, Bundle bundle) {
                 SharedPrefsHelper.getInstance().saveQbUser(user);
-                hideProgressDialog();
-                buttonOK.setEnabled(true);
-                ToastUtils.longToast(R.string.profile_updated);
+                showSuccessStatus(R.string.profile_updated);
             }
 
             @Override
             public void onError(QBResponseException e) {
-                e.printStackTrace();
-                hideProgressDialog();
-                buttonOK.setEnabled(true);
-                ToastUtils.longToast(R.string.error);
+                showErrorStatus(e);
             }
         });
     }
 
     private void uploadImageFile(QBUser oldUser) {
-        buttonOK.setEnabled(false);
-        showProgressDialog(R.string.wait);
-        ToastUtils.longToast(R.string.uploading_profile_image);
+        showWaitStatus(R.string.uploading_profile_image);
         try {
             InputStream inputStream = getContentResolver().openInputStream(imageUri);
-            File imageFile = ImageUtils.getImageFileContent(inputStream, String.valueOf(oldUser.getId()));
-            if (imageFile == null) {
-                hideProgressDialog();
-                ToastUtils.longToast(R.string.error);
-                imageUri = null;
-                buttonOK.setEnabled(true);
-                return;
-            }
-            QBContent.uploadFileTask(imageFile, false, String.valueOf(imageFile.hashCode()), new QBProgressCallback() {
-                @Override
-                public void onProgressUpdate(int progress) {
-
-                }
-            }).performAsync( new QBEntityCallback<QBFile>() {
-                @Override
-                public void onSuccess(QBFile qbFile, Bundle params) {
-                    hideProgressDialog();
-                    ToastUtils.longToast(R.string.uploaded_profile_image);
-                    QBUser updatedUser = ChatHelper.getCurrentUser();
-                    updatedUser.setFileId(qbFile.getId());
-                    imageUri = null;
-                    updatedUser.setPassword(null);
-                    updateUser(updatedUser);
-                }
-
-                @Override
-                public void onError(QBResponseException error) {
-                    error.printStackTrace();
-                    hideProgressDialog();
-                    ToastUtils.longToast(R.string.error);
-                    imageUri = null;
-                    buttonOK.setEnabled(true);
-                }
-            });
+            GetImageFileTask task = new GetImageFileTask(ProfileActivity.this, GetImageFileTask.UPLOAD_IMAGE);
+            task.execute(inputStream, String.valueOf(oldUser.getId()));
         } catch (Exception e) {
-            e.printStackTrace();
-            hideProgressDialog();
-            ToastUtils.longToast(R.string.error);
-            imageUri = null;
-            buttonOK.setEnabled(true);
+            showErrorStatus(e);
         }
     }
 
     private void updateImageFile(QBUser oldUser) {
-        buttonOK.setEnabled(false);
-        showProgressDialog(R.string.wait);
-        ToastUtils.longToast(R.string.updating_profile_image);
+        showWaitStatus(R.string.updating_profile_image);
         try {
             InputStream inputStream = getContentResolver().openInputStream(imageUri);
-            File imageFile = ImageUtils.getImageFileContent(inputStream, String.valueOf(oldUser.getId()));
-            if (imageFile == null) {
-                ToastUtils.longToast(R.string.error);
-                hideProgressDialog();
-                imageUri = null;
-                buttonOK.setEnabled(true);
-                return;
-            }
-            QBContent.updateFileTask(imageFile, oldUser.getFileId(), String.valueOf(imageFile.hashCode()), new QBProgressCallback() {
-                @Override
-                public void onProgressUpdate(int progress) {
-
-                }
-            }).performAsync( new QBEntityCallback<QBFile>() {
-                @Override
-                public void onSuccess(QBFile qbFile, Bundle params) {
-                    hideProgressDialog();
-                    ToastUtils.longToast(R.string.updated_profile_image);
-                    QBUser updatedUser = ChatHelper.getCurrentUser();
-                    updatedUser.setFileId(qbFile.getId());
-                    imageUri = null;
-                    updatedUser.setPassword(null);
-                    updateUser(updatedUser);
-                }
-
-                @Override
-                public void onError(QBResponseException errors) {
-                    errors.printStackTrace();
-                    ToastUtils.longToast(R.string.error);
-                    hideProgressDialog();
-                    imageUri = null;
-                    buttonOK.setEnabled(true);
-                }
-            });
+            GetImageFileTask task = new GetImageFileTask(ProfileActivity.this, GetImageFileTask.UPDATE_IMAGE);
+            task.execute(inputStream, String.valueOf(oldUser.getId()));
         } catch (Exception e) {
-            e.printStackTrace();
-            ToastUtils.longToast(R.string.error);
-            hideProgressDialog();
-            imageUri = null;
-            buttonOK.setEnabled(true);
+            showErrorStatus(e);
         }
     }
 
@@ -353,6 +291,9 @@ public class ProfileActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == REQUEST_CODE_TAKE_PICTURE && resultCode == RESULT_OK) {
+
+            imageUri = null;
+
             Bundle extras = data.getExtras();
             if (extras == null) {
                 ToastUtils.longToast(R.string.error);
@@ -364,7 +305,7 @@ public class ProfileActivity extends BaseActivity {
                     imageView.setImageBitmap(imageBitmap);
                     nameAbbr.setVisibility(View.GONE);
                     imageUri = ResourceUtils.getImageUri(getApplicationContext(), imageBitmap);
-                    ToastUtils.longToast(R.string.saved_picture);
+                    ToastUtils.longToast(R.string.selected_picture);
                 }
             }
         }
@@ -387,6 +328,7 @@ public class ProfileActivity extends BaseActivity {
 
                     imageView.setImageURI(imageUri);
                     nameAbbr.setVisibility(View.GONE);
+                    ToastUtils.longToast(R.string.selected_picture);
                 } else {
                     ToastUtils.longToast(R.string.no_image_selected);
                 }
@@ -396,6 +338,75 @@ public class ProfileActivity extends BaseActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onImageFileShowReady(File imageFile) {
+        hideProgressDialog();
+        if (imageFile == null) {
+            showDefaultAvatar(ChatHelper.getCurrentUser().getFullName());
+            return;
+        }
+        ImageUtils.showImageFile(imageFile, imageView);
+        nameAbbr.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onImageFileUploadReady(File imageFile) {
+        if (imageFile == null) {
+            showErrorStatus(null);
+            return;
+        }
+        QBContent.uploadFileTask(imageFile, false, String.valueOf(imageFile.hashCode()), new QBProgressCallback() {
+            @Override
+            public void onProgressUpdate(int progress) {
+
+            }
+        }).performAsync( new QBEntityCallback<QBFile>() {
+            @Override
+            public void onSuccess(QBFile qbFile, Bundle params) {
+                showSuccessStatus(R.string.uploaded_profile_image);
+
+                QBUser updatedUser = ChatHelper.getCurrentUser();
+                updatedUser.setFileId(qbFile.getId());
+                updatedUser.setPassword(null);
+                updateUser(updatedUser);
+            }
+
+            @Override
+            public void onError(QBResponseException error) {
+                showErrorStatus(error);
+            }
+        });
+    }
+
+    @Override
+    public void onImageFileUpdateReady(File imageFile) {
+        if (imageFile == null) {
+            showErrorStatus(null);
+            return;
+        }
+        QBContent.updateFileTask(imageFile, ChatHelper.getCurrentUser().getFileId(), String.valueOf(imageFile.hashCode()), new QBProgressCallback() {
+            @Override
+            public void onProgressUpdate(int progress) {
+
+            }
+        }).performAsync( new QBEntityCallback<QBFile>() {
+            @Override
+            public void onSuccess(QBFile qbFile, Bundle params) {
+                showSuccessStatus(R.string.updated_profile_image);
+
+                QBUser updatedUser = ChatHelper.getCurrentUser();
+                updatedUser.setFileId(qbFile.getId());
+                updatedUser.setPassword(null);
+                updateUser(updatedUser);
+            }
+
+            @Override
+            public void onError(QBResponseException error) {
+                showErrorStatus(error);
+            }
+        });
     }
 
     private class TextWatcherListener implements TextWatcher {

@@ -10,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBDialogType;
 import com.quickblox.content.QBContent;
@@ -18,6 +17,8 @@ import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.QBProgressCallback;
 import com.quickblox.core.exception.QBResponseException;
 import com.royal.chat.R;
+import com.royal.chat.utils.GetImageFileListener;
+import com.royal.chat.utils.GetImageFileTask;
 import com.royal.chat.utils.ImageUtils;
 import com.royal.chat.utils.ResourceUtils;
 import com.royal.chat.utils.UiUtils;
@@ -34,10 +35,12 @@ public class DialogsAdapter extends BaseAdapter {
     private Context context;
     private List<QBChatDialog> selectedItems = new ArrayList<>();
     private List<QBChatDialog> dialogs;
+    private GetImageFileListener listener;
 
-    public DialogsAdapter(Context context, List<QBChatDialog> dialogs) {
+    public DialogsAdapter(Context context, List<QBChatDialog> dialogs, GetImageFileListener listener) {
         this.context = context;
         this.dialogs = dialogs;
+        this.listener = listener;
     }
 
     @Override
@@ -72,8 +75,11 @@ public class DialogsAdapter extends BaseAdapter {
                 holder.dialogImageView.setImageDrawable(null);
                 holder.nameAbbrView.setVisibility(View.VISIBLE);
             } else {
-                holder.nameAbbrView.setVisibility(View.GONE);
-                File imageFile = ImageUtils.getImageFileContent(String.valueOf(dialog.getRecipientId()));
+                holder.dialogImageView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(position));
+                holder.dialogImageView.setImageDrawable(null);
+                holder.nameAbbrView.setVisibility(View.VISIBLE);
+
+                File imageFile = ImageUtils.getExistImageFile(String.valueOf(dialog.getRecipientId()));
                 if (imageFile == null) {
                     Integer fileId = QbDialogUtils.getDialogFileId(dialog);
                     Bundle params = new Bundle();
@@ -86,14 +92,8 @@ public class DialogsAdapter extends BaseAdapter {
                         @Override
                         public void onSuccess(InputStream inputStream, Bundle bundle) {
                             try {
-                                File imageFile = ImageUtils.getImageFileContent(inputStream, String.valueOf(dialog.getRecipientId()));
-                                Glide.with(context)
-                                        .load(imageFile)
-                                        .override(100, 100)
-                                        .dontTransform()
-                                        .error(R.drawable.ic_error)
-                                        .into(holder.dialogImageView);
-                                inputStream.close();
+                                GetImageFileTask task = new GetImageFileTask(listener, GetImageFileTask.SHOW_IMAGE);
+                                task.execute(inputStream, String.valueOf(dialog.getRecipientId()));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -104,12 +104,8 @@ public class DialogsAdapter extends BaseAdapter {
                         }
                     });
                 } else {
-                    Glide.with(context)
-                            .load(imageFile)
-                            .override(100, 100)
-                            .dontTransform()
-                            .error(R.drawable.ic_error)
-                            .into(holder.dialogImageView);
+                    ImageUtils.showImageFile(imageFile, holder.dialogImageView);
+                    holder.nameAbbrView.setVisibility(View.GONE);
                 }
             }
 

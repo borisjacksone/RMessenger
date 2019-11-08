@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -186,5 +187,29 @@ public class AudioUtils {
             AUDIO_FILE_PATH = App.getInstance().getFilesDir().getAbsolutePath() + "/record_audio.mp3";
         }
         return AUDIO_FILE_PATH;
+    }
+
+    public static boolean removeCachedAudios() {
+        try {
+            boolean cleaned = true;
+            File folder = new File(App.getInstance().getFilesDir().getAbsolutePath());
+            if (folder.exists() && folder.isDirectory()) {
+                File[] files = folder.listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        return name.contains(".mp3");
+                    }
+                });
+                for (File file : files) {
+                    if (!file.delete()) {
+                        cleaned = false;
+                    }
+                }
+                return cleaned;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

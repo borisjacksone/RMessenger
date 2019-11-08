@@ -29,9 +29,10 @@ import com.quickblox.core.exception.QBResponseException;
 import com.quickblox.core.helper.CollectionsUtil;
 import com.royal.chat.R;
 import com.royal.chat.managers.DialogsManager;
-import com.royal.chat.ui.activity.ProfileActivity;
 import com.royal.chat.ui.adapter.listeners.AttachClickListener;
 import com.royal.chat.ui.adapter.listeners.MessageLinkClickListener;
+import com.royal.chat.utils.GetImageFileListener;
+import com.royal.chat.utils.GetImageFileTask;
 import com.royal.chat.utils.ImageUtils;
 import com.royal.chat.utils.LinkUtils;
 import com.royal.chat.utils.MessageTextClickMovement;
@@ -99,13 +100,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     private MessageViewHolder viewHolder;
     private List<QBChatMessage> chatMessages;
     private LayoutInflater inflater;
+    private GetImageFileListener listener;
     protected Context context;
 
-    public ChatAdapter(Context context, QBChatDialog chatDialog, List<QBChatMessage> chatMessages) {
+    public ChatAdapter(Context context, QBChatDialog chatDialog, List<QBChatMessage> chatMessages, GetImageFileListener listener) {
         this.chatDialog = chatDialog;
         this.context = context;
         this.chatMessages = chatMessages;
         this.inflater = LayoutInflater.from(context);
+        this.listener = listener;
     }
 
     public void updateStatusDelivered(String messageID, Integer userId) {
@@ -425,8 +428,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
             nameAbbr.setVisibility(View.VISIBLE);
             nameAbbr.setText(UiUtils.getFirstTwoCharacters(getSenderName(chatMessage)));
         } else {
-            nameAbbr.setVisibility(View.GONE);
-            File imageFile = ImageUtils.getImageFileContent(String.valueOf(chatMessage.getSenderId()));
+            avatarView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(chatMessage.getSenderId()));
+            avatarView.setImageDrawable(null);
+            nameAbbr.setVisibility(View.VISIBLE);
+            nameAbbr.setText(UiUtils.getFirstTwoCharacters(getSenderName(chatMessage)));
+
+            File imageFile = ImageUtils.getExistImageFile(String.valueOf(chatMessage.getSenderId()));
             if (imageFile == null) {
                 Bundle params = new Bundle();
                 QBContent.downloadFileById(fileId, params, new QBProgressCallback() {
@@ -438,14 +445,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
                     @Override
                     public void onSuccess(InputStream inputStream, Bundle bundle) {
                         try {
-                            File imageFile = ImageUtils.getImageFileContent(inputStream, String.valueOf(chatMessage.getSenderId()));
-                            Glide.with(context)
-                                    .load(imageFile)
-                                    .override(100, 100)
-                                    .dontTransform()
-                                    .error(R.drawable.ic_error)
-                                    .into(avatarView);
-                            inputStream.close();
+                            GetImageFileTask task = new GetImageFileTask(listener, GetImageFileTask.SHOW_IMAGE);
+                            task.execute(inputStream, String.valueOf(chatMessage.getSenderId()));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -457,12 +458,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
                     }
                 });
             } else {
-                Glide.with(context)
-                        .load(imageFile)
-                        .override(100, 100)
-                        .dontTransform()
-                        .error(R.drawable.ic_error)
-                        .into(avatarView);
+                ImageUtils.showImageFile(imageFile, avatarView);
+                nameAbbr.setVisibility(View.GONE);
             }
         }
     }

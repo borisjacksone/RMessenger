@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.quickblox.users.model.QBUser;
+import com.royal.chat.utils.GetImageFileListener;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,8 +17,8 @@ public class CheckboxUsersAdapter extends UsersAdapter {
     private List<Integer> initiallySelectedUsers;
     private Set<QBUser> selectedUsers;
 
-    public CheckboxUsersAdapter(Context context, List<QBUser> users) {
-        super(context, users);
+    public CheckboxUsersAdapter(Context context, List<QBUser> users, GetImageFileListener listener) {
+        super(context, users, listener);
         selectedUsers = new HashSet<>();
         this.selectedUsers.add(currentUser);
 

@@ -45,7 +45,7 @@
     <string name="login_select_user_for_login">채팅에 로그인 할 사용자를 선택하십시오.</string>
     <string name="login_cant_obtain_users">사용자 오류를 얻을 수 없습니다.</string>
     <string name="login_chat_login_error">로그인 채팅 오류발생. 다시 로그인하십시오.</string>
-    <string name="login_new_name">이름을 입력하고 로그인 하십시오.</string>
+    <string name="login_new_name">영어 이름을 입력하고 로그인 하십시오.</string>
     <string name="login_last_name">다음의 계정으로 로그인 하십시오.</string>
     <string name="login_hint_login">로그인</string>
     <string name="login_hint_username">이 름(영숫자)</string>
@@ -135,7 +135,6 @@
     <string name="change_name_success">이름 변경 성공</string>
     <string name="first_name">성</string>
     <string name="last_name">이 름</string>
-    <string name="enter_new_name">새 이름을 입력하십시오.</string>
     <string name="wait">잠시만 기다려주세요.</string>
     <string name="menu_select_image">이미지</string>
     <string name="menu_select_audio">오디오</string>
@@ -162,13 +161,18 @@
     <string name="text_invite_sms">R메신저에 가입하여 안전하고 자유롭게 대화하십시오!</string>
     <string name="menu_select_gallery">갤러리에서 선택</string>
     <string name="menu_select_camera">사진 찍기</string>
-    <string name="saved_picture">사진이 저장되었습니다.</string>
+    <string name="selected_picture">사진이 선택되었습니다.</string>
     <string name="no_image_selected">이미지 파일이 선택되지 않았습니다.</string>
     <string name="uploading_profile_image">이미지 업로드 중 입니다.</string>
     <string name="uploaded_profile_image">이미지 업로드가 성공했습니다.</string>
     <string name="updating_profile_image">이미지 업데이트 중 입니다.</string>
     <string name="profile_updated">프로필이 업데이트되었습니다.</string>
     <string name="updated_profile_image">이미지 업데이트가 성공했습니다.</string>
+    <string name="cleaned_cache">캐시 된 데이터가 정리되었습니다.</string>
+    <string name="text_confirm_dialog_title">알 림</string>
+    <string name="text_comfirm_exit">R메신저를 정말로 종료 하시겠습니까?</string>
+    <string name="text_yes">예</string>
+    <string name="text_no">아니</string>
     <string name="appinfo_application_description">
         진정한 인스턴트 메신저 — 모든 기기에서 간단하고 빠르며 안전하며 비공개입니다.\n\n
         속 도 : R메신저는 속도가 빠른 메시징 앱으로 전 세계의 고유 한 분산 데이터 센터 네트워크를 통해 사람들을 연결합니다.\n\n

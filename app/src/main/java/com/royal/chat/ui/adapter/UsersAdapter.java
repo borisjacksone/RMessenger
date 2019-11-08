@@ -10,14 +10,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.quickblox.chat.QBChatService;
 import com.quickblox.content.QBContent;
 import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.QBProgressCallback;
 import com.quickblox.core.exception.QBResponseException;
 import com.royal.chat.R;
-import com.royal.chat.ui.activity.ProfileActivity;
+import com.royal.chat.utils.GetImageFileListener;
+import com.royal.chat.utils.GetImageFileTask;
 import com.royal.chat.utils.ImageUtils;
 import com.royal.chat.utils.ResourceUtils;
 import com.royal.chat.utils.UiUtils;
@@ -35,9 +35,11 @@ public class UsersAdapter extends BaseAdapter {
     protected List<QBUser> userList;
     protected QBUser currentUser;
     private Context context;
+    private GetImageFileListener listener;
 
-    public UsersAdapter(Context context, List<QBUser> users) {
+    public UsersAdapter(Context context, List<QBUser> users, GetImageFileListener listener) {
         this.context = context;
+        this.listener = listener;
         currentUser = QBChatService.getInstance().getUser();
         userList = users;
         addCurrentUserToUserList();
@@ -93,9 +95,14 @@ public class UsersAdapter extends BaseAdapter {
 
         if (user.getFileId() == null) {
             holder.userImageView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(position));
+            holder.userImageView.setImageDrawable(null);
+            holder.nameAbbrView.setVisibility(View.VISIBLE);
         } else {
-            holder.nameAbbrView.setVisibility(View.GONE);
-            File imageFile = ImageUtils.getImageFileContent(String.valueOf(user.getId()));
+            holder.userImageView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(position));
+            holder.userImageView.setImageDrawable(null);
+            holder.nameAbbrView.setVisibility(View.VISIBLE);
+
+            File imageFile = ImageUtils.getExistImageFile(String.valueOf(user.getId()));
             if (imageFile == null) {
                 Integer fileId = user.getFileId();
                 Bundle params = new Bundle();
@@ -108,14 +115,8 @@ public class UsersAdapter extends BaseAdapter {
                     @Override
                     public void onSuccess(InputStream inputStream, Bundle bundle) {
                         try {
-                            File imageFile = ImageUtils.getImageFileContent(inputStream, String.valueOf(user.getId()));
-                            Glide.with(context)
-                                    .load(imageFile)
-                                    .override(100, 100)
-                                    .dontTransform()
-                                    .error(R.drawable.ic_error)
-                                    .into(holder.userImageView);
-                            inputStream.close();
+                            GetImageFileTask task = new GetImageFileTask(listener, GetImageFileTask.SHOW_IMAGE);
+                            task.execute(inputStream, String.valueOf(user.getId()));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -126,12 +127,8 @@ public class UsersAdapter extends BaseAdapter {
                     }
                 });
             } else {
-                Glide.with(context)
-                        .load(imageFile)
-                        .override(100, 100)
-                        .dontTransform()
-                        .error(R.drawable.ic_error)
-                        .into(holder.userImageView);
+                ImageUtils.showImageFile(imageFile, holder.userImageView);
+                holder.nameAbbrView.setVisibility(View.GONE);
             }
         }
         holder.userCheckBox.setVisibility(View.GONE);

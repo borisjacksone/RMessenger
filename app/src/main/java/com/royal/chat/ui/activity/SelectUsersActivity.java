@@ -23,18 +23,20 @@ import com.quickblox.core.request.GenericQueryRule;
 import com.quickblox.core.request.QBPagedRequestBuilder;
 import com.royal.chat.R;
 import com.royal.chat.ui.adapter.CheckboxUsersAdapter;
+import com.royal.chat.utils.GetImageFileListener;
 import com.royal.chat.utils.ToastUtils;
 import com.royal.chat.utils.chat.ChatHelper;
 import com.quickblox.users.QBUsers;
 import com.quickblox.users.model.QBUser;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AlertDialog;
 
-public class SelectUsersActivity extends BaseActivity {
+public class SelectUsersActivity extends BaseActivity implements GetImageFileListener {
     public static final String EXTRA_QB_USERS = "qb_users";
     public static final String EXTRA_CHAT_NAME = "chat_name";
     public static final int MINIMUM_CHAT_OCCUPANTS_SIZE = 2;
@@ -56,6 +58,16 @@ public class SelectUsersActivity extends BaseActivity {
     private long lastClickTime = 0l;
     private QBChatDialog qbChatDialog;
     private String chatName;
+
+    private Runnable notifyDataSetChangedThread = new Runnable() {
+        @Override
+        public void run() {
+            if (usersAdapter == null) {
+                return;
+            }
+            usersAdapter.notifyDataSetChanged();
+        }
+    };
 
     public static void start(Context context) {
         Intent intent = new Intent(context, SelectUsersActivity.class);
@@ -209,7 +221,7 @@ public class SelectUsersActivity extends BaseActivity {
                     // update occupants list form server
                     getDialog();
                 } else {
-                    usersAdapter = new CheckboxUsersAdapter(SelectUsersActivity.this, users);
+                    usersAdapter = new CheckboxUsersAdapter(SelectUsersActivity.this, users, SelectUsersActivity.this);
                     updateUsersAdapter();
                 }
             }
@@ -267,7 +279,7 @@ public class SelectUsersActivity extends BaseActivity {
         QBUsers.getUsersByIDs(userIdsList, null).performAsync(new QBEntityCallback<ArrayList<QBUser>>() {
             @Override
             public void onSuccess(ArrayList<QBUser> qbUsers, Bundle bundle) {
-                usersAdapter = new CheckboxUsersAdapter(SelectUsersActivity.this, users);
+                usersAdapter = new CheckboxUsersAdapter(SelectUsersActivity.this, users, SelectUsersActivity.this);
                 for (QBUser user : qbUsers) {
                     usersAdapter.addUserToUserList(user);
                 }
@@ -280,5 +292,23 @@ public class SelectUsersActivity extends BaseActivity {
                 progressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    public void onImageFileShowReady(File file) {
+        if (file == null) {
+            return;
+        }
+        runOnUiThread(notifyDataSetChangedThread);
+    }
+
+    @Override
+    public void onImageFileUploadReady(File file) {
+
+    }
+
+    @Override
+    public void onImageFileUpdateReady(File file) {
+
     }
 }

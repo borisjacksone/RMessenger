@@ -1,7 +1,9 @@
 package com.royal.chat.ui.activity;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -44,7 +46,10 @@ import com.royal.chat.managers.DialogsManager;
 import com.royal.chat.ui.adapter.DialogsAdapter;
 import com.royal.chat.ui.dialog.LanguageDialog;
 import com.royal.chat.ui.dialog.ProgressDialogFragment;
+import com.royal.chat.utils.AudioUtils;
 import com.royal.chat.utils.FcmConsts;
+import com.royal.chat.utils.GetImageFileListener;
+import com.royal.chat.utils.ImageUtils;
 import com.royal.chat.utils.SharedPrefsHelper;
 import com.royal.chat.utils.SmsHelper;
 import com.royal.chat.utils.SystemPermissionHelper;
@@ -57,6 +62,7 @@ import com.royal.chat.utils.qb.callback.QbEntityCallbackImpl;
 import com.quickblox.users.QBUsers;
 import com.quickblox.users.model.QBUser;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,7 +72,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.view.ActionMode;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-public class DialogsActivity extends BaseActivity implements DialogsManager.ManagingDialogsCallbacks {
+public class DialogsActivity extends BaseActivity implements DialogsManager.ManagingDialogsCallbacks, GetImageFileListener {
     private static final String TAG = DialogsActivity.class.getSimpleName();
     private static final int REQUEST_SELECT_PEOPLE = 174;
     private static final int REQUEST_DIALOG_ID_FOR_UPDATE = 165;
@@ -91,6 +97,16 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
     private QBUser currentUser;
     private int mInterval = 5 * 60 * 1000;
     private Handler mHandler;
+
+    private Runnable notifyDataSetChangedThread = new Runnable() {
+        @Override
+        public void run() {
+            if (dialogsAdapter == null) {
+                return;
+            }
+            dialogsAdapter.notifyDataSetChanged();
+        }
+    };
 
     public static void start(Context context) {
         Intent intent = new Intent(context, DialogsActivity.class);
@@ -208,6 +224,36 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
         unregisterQbChatListeners();
         stopRepeatingTask();
         SmsHelper.getInstance(this).unregisterReceiver();
+    }
+
+    @Override
+    public void onBackPressed() {
+        showExitDialog();
+    }
+
+    private void showExitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.text_confirm_dialog_title));
+        builder.setMessage(getResources().getString(R.string.text_comfirm_exit));
+        builder.setCancelable(false);
+        builder.setPositiveButton(getResources().getString(R.string.text_yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (ImageUtils.removeCachedImages() && AudioUtils.removeCachedAudios()) {
+                    ToastUtils.longToast(R.string.cleaned_cache);
+                }
+
+                finish();
+            }
+        });
+
+        builder.setNegativeButton(getResources().getString(R.string.text_no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        builder.show();
     }
 
     private void startRepeatingTask() {
@@ -443,7 +489,7 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
         fab = findViewById(R.id.fab_dialogs_new_chat);
         setOnRefreshListener = findViewById(R.id.swipy_refresh_layout);
 
-        dialogsAdapter = new DialogsAdapter(this, new ArrayList<>(QbDialogHolder.getInstance().getDialogs().values()));
+        dialogsAdapter = new DialogsAdapter(this, new ArrayList<>(QbDialogHolder.getInstance().getDialogs().values()), this);
 
         TextView listHeader = (TextView) LayoutInflater.from(this)
                 .inflate(R.layout.include_list_hint_header, dialogsListView, false);
@@ -576,6 +622,24 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
     @Override
     public void onNewDialogLoaded(QBChatDialog chatDialog) {
         updateDialogsAdapter();
+    }
+
+    @Override
+    public void onImageFileShowReady(File file) {
+        if (file == null) {
+            return;
+        }
+        runOnUiThread(notifyDataSetChangedThread);
+    }
+
+    @Override
+    public void onImageFileUploadReady(File file) {
+
+    }
+
+    @Override
+    public void onImageFileUpdateReady(File file) {
+
     }
 
     private class DeleteActionModeCallback implements ActionMode.Callback {

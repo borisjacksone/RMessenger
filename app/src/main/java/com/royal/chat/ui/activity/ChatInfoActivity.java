@@ -10,18 +10,30 @@ import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.exception.QBResponseException;
 import com.royal.chat.R;
 import com.royal.chat.ui.adapter.UsersAdapter;
-import com.royal.chat.utils.ToastUtils;
+import com.royal.chat.utils.GetImageFileListener;
 import com.royal.chat.utils.chat.ChatHelper;
 import com.royal.chat.utils.qb.QbUsersHolder;
 import com.quickblox.users.model.QBUser;
 
+import java.io.File;
 import java.util.List;
 
-public class ChatInfoActivity extends BaseActivity {
+public class ChatInfoActivity extends BaseActivity implements GetImageFileListener {
     private static final String EXTRA_DIALOG = "dialog";
 
     private ListView usersListView;
+    private UsersAdapter adapter;
     private QBChatDialog qbDialog;
+
+    private Runnable notifyDataSetChangedThread = new Runnable() {
+        @Override
+        public void run() {
+            if (adapter == null) {
+                return;
+            }
+            adapter.notifyDataSetChanged();
+        }
+    };
 
     public static void start(Context context, QBChatDialog qbDialog) {
         Intent intent = new Intent(context, ChatInfoActivity.class);
@@ -60,7 +72,25 @@ public class ChatInfoActivity extends BaseActivity {
     private void buildUserList() {
         List<Integer> userIds = qbDialog.getOccupants();
         List<QBUser> users = QbUsersHolder.getInstance().getUsersByIds(userIds);
-        UsersAdapter adapter = new UsersAdapter(this, users);
+        adapter = new UsersAdapter(this, users, this);
         usersListView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onImageFileShowReady(File file) {
+        if (file == null) {
+            return;
+        }
+        runOnUiThread(notifyDataSetChangedThread);
+    }
+
+    @Override
+    public void onImageFileUploadReady(File file) {
+
+    }
+
+    @Override
+    public void onImageFileUpdateReady(File file) {
+
     }
 }

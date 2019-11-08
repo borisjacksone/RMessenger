@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.os.StrictMode;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,8 +17,10 @@ import com.quickblox.chat.QBChatService;
 import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.exception.QBResponseException;
 import com.royal.chat.R;
-import com.royal.chat.utils.ErrorUtils;
+import com.royal.chat.utils.AudioUtils;
+import com.royal.chat.utils.ImageUtils;
 import com.royal.chat.utils.SharedPrefsHelper;
+import com.royal.chat.utils.ToastUtils;
 import com.royal.chat.utils.chat.ChatHelper;
 
 import androidx.annotation.StringRes;
@@ -36,9 +37,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         actionBar = getSupportActionBar();
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
     }
 
     @Override
@@ -119,6 +117,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else {
             onResumeFinished();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void hideNotifications() {
