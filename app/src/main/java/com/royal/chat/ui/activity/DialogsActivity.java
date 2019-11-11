@@ -6,11 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,8 +48,6 @@ import com.royal.chat.utils.FcmConsts;
 import com.royal.chat.utils.GetImageFileListener;
 import com.royal.chat.utils.ImageUtils;
 import com.royal.chat.utils.SharedPrefsHelper;
-import com.royal.chat.utils.SmsHelper;
-import com.royal.chat.utils.SystemPermissionHelper;
 import com.royal.chat.utils.ToastUtils;
 import com.royal.chat.utils.chat.ChatHelper;
 import com.royal.chat.utils.qb.QbChatDialogMessageListenerImp;
@@ -205,7 +200,7 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
     @Override
     protected void onResume() {
         super.onResume();
-        SmsHelper.getInstance(DialogsActivity.this).registerReceiver();
+//        SmsHelper.getInstance(DialogsActivity.this).registerReceiver();
 
         if (actionBar != null) {
             actionBar.setTitle(getString(R.string.dialogs_logged_in_as, ChatHelper.getCurrentUser().getFullName()));
@@ -223,7 +218,7 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
         super.onDestroy();
         unregisterQbChatListeners();
         stopRepeatingTask();
-        SmsHelper.getInstance(this).unregisterReceiver();
+//        SmsHelper.getInstance(this).unregisterReceiver();
     }
 
     @Override
@@ -334,37 +329,37 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
                 languageDialog.show();
                 return true;
 
-            case R.id.menu_invite_friend:
-                openSmsHelper();
-                return true;
+//            case R.id.menu_invite_friend:
+//                openSmsHelper();
+//                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void openSmsHelper() {
-        SystemPermissionHelper permissionHelper = new SystemPermissionHelper(this);
-        if (permissionHelper.isSendSmsPermissionGranted()) {
-            showContactSelector();
-        } else {
-            permissionHelper.requestPermissionsForSendSms();
-        }
-    }
+//    private void openSmsHelper() {
+//        SystemPermissionHelper permissionHelper = new SystemPermissionHelper(this);
+//        if (permissionHelper.isSendSmsPermissionGranted()) {
+//            showContactSelector();
+//        } else {
+//            permissionHelper.requestPermissionsForSendSms();
+//        }
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == SystemPermissionHelper.PERMISSIONS_FOR_SEND_SMS_REQUEST && grantResults[0] != -1) {
-            showContactSelector();
-        }
+//        if (requestCode == SystemPermissionHelper.PERMISSIONS_FOR_SEND_SMS_REQUEST && grantResults[0] != -1) {
+//            showContactSelector();
+//        }
     }
 
-    private void showContactSelector() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-        startActivityForResult(intent, REQUEST_SELECT_CONTACT);
-    }
+//    private void showContactSelector() {
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+//        startActivityForResult(intent, REQUEST_SELECT_CONTACT);
+//    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -394,19 +389,20 @@ public class DialogsActivity extends BaseActivity implements DialogsManager.Mana
                     isProcessingResultInProgress = false;
                     updateDialogsList();
                 }
-            } else if (requestCode == REQUEST_SELECT_CONTACT) {
-
-                if (data == null) {
-                    return;
-                }
-
-                Uri contactData = data.getData();
-                Cursor cursor = managedQuery(contactData, null, null, null, null);
-                cursor.moveToFirst();
-
-                String phoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                SmsHelper.getInstance(DialogsActivity.this).sendSms(phoneNumber);
             }
+//            else if (requestCode == REQUEST_SELECT_CONTACT) {
+
+//                if (data == null) {
+//                    return;
+//                }
+//
+//                Uri contactData = data.getData();
+//                Cursor cursor = managedQuery(contactData, null, null, null, null);
+//                cursor.moveToFirst();
+//
+//                String phoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                SmsHelper.getInstance(DialogsActivity.this).sendSms(phoneNumber);
+//            }
         } else {
             updateDialogsAdapter();
         }

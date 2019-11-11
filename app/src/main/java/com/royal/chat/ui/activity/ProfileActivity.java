@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 
@@ -32,6 +33,7 @@ import com.royal.chat.utils.GetImageFileTask;
 import com.royal.chat.utils.ImageUtils;
 import com.royal.chat.utils.ResourceUtils;
 import com.royal.chat.utils.SharedPrefsHelper;
+import com.royal.chat.utils.SystemPermissionHelper;
 import com.royal.chat.utils.ToastUtils;
 import com.royal.chat.utils.UiUtils;
 import com.royal.chat.utils.chat.ChatHelper;
@@ -50,6 +52,7 @@ public class ProfileActivity extends BaseActivity implements GetImageFileListene
     private EditText editLastName;
     private Button buttonOK;
     private Uri imageUri;
+    private SystemPermissionHelper systemPermissionHelper;
 
     private static final int REQUEST_CODE_TAKE_PICTURE = 8182;
     private static final int REQUEST_CODE_PICK_IMAGE_SINGLE = 8283;
@@ -60,6 +63,7 @@ public class ProfileActivity extends BaseActivity implements GetImageFileListene
         setContentView(R.layout.activity_profile);
 
         QBUser oldUser = ChatHelper.getCurrentUser();
+        systemPermissionHelper = new SystemPermissionHelper(ProfileActivity.this);
 
         setActionBar();
         initViews(oldUser);
@@ -122,7 +126,11 @@ public class ProfileActivity extends BaseActivity implements GetImageFileListene
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSelectImageMenu(v);
+                if (systemPermissionHelper.isSaveImagePermissionGranted()) {
+                    showSelectImageMenu(v);
+                } else {
+                    systemPermissionHelper.requestPermissionsForSaveFileImage();
+                }
             }
         });
 
@@ -159,6 +167,20 @@ public class ProfileActivity extends BaseActivity implements GetImageFileListene
                 }
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == SystemPermissionHelper.PERMISSIONS_FOR_SAVE_FILE_IMAGE_REQUEST && grantResults[0] != -1) {
+            if (systemPermissionHelper.isSaveImagePermissionGranted()) {
+                showSelectImageMenu(imageView);
+            } else {
+                systemPermissionHelper.requestPermissionsForSaveFileImage();
+            }
+        } else {
+            systemPermissionHelper.requestPermissionsForSaveFileImage();
+        }
     }
 
     private void showDefaultAvatar(String fullName) {

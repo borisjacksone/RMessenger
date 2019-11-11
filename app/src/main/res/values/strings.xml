@@ -155,7 +155,7 @@
     <string name="text_english">English</string>
     <string name="text_korean">한국어</string>
     <string name="text_ok">OK</string>
-    <string name="text_privacy_link"><u>Accept privacy policy</u></string>
+    <string name="text_privacy_link">I accept a <u>Privacy Policy</u>.</string>
     <string name="need_accept_privacy_policy">You should accept privacy policy.</string>
     <string name="need_accept_permissions">You should allow permissions.</string>
     <string name="text_invite_sms">Hi, Come join this security app and have a safe and free conversation!</string>

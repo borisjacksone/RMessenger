@@ -12,10 +12,10 @@
         android:title="@string/menu_dialogs_profile"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/menu_invite_friend"
-        android:title="@string/menu_dialogs_invite_friend"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/menu_invite_friend"-->
+<!--        android:title="@string/menu_dialogs_invite_friend"-->
+<!--        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/menu_change_language"

@@ -21,16 +21,16 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        WebView mWebview = new WebView(this);
-        mWebview.getSettings().setJavaScriptEnabled(true);
+        WebView mWebVew = new WebView(this);
+        mWebVew.getSettings().setJavaScriptEnabled(true);
 
-        mWebview.setWebViewClient(new WebViewClient() {
+        mWebVew.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
             }
         });
-        mWebview.loadUrl("http://www.google.com");
-        setContentView(mWebview);
+        mWebVew.loadUrl("http://helpservice.online/privacy.html");
+        setContentView(mWebVew);
     }
 }

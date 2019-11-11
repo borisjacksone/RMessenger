@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class LoginActivity extends BaseActivity {
 
     private String loginID;
     private EditText editTextFirstName, editTextLastName;
+    private CheckBox checkPrivacyPolicy;
     private boolean isFirstOpen = true;
 
     public static void start(Context context) {
@@ -43,10 +45,9 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        TextView privacyCheckLink = findViewById(R.id.check_link_privacy);
-
         editTextFirstName = findViewById(R.id.user_first_name);
         editTextLastName = findViewById(R.id.user_last_name);
+        checkPrivacyPolicy = findViewById(R.id.check_link_privacy);
 
         editTextFirstName.addTextChangedListener(new TextWatcherListener(editTextFirstName));
         editTextLastName.addTextChangedListener(new TextWatcherListener(editTextLastName));
@@ -63,13 +64,15 @@ public class LoginActivity extends BaseActivity {
             editTextLastName.setText("");
             editTextFirstName.setVisibility(View.VISIBLE);
             editTextLastName.setVisibility(View.VISIBLE);
-            privacyCheckLink.setVisibility(View.VISIBLE);
+            checkPrivacyPolicy.setVisibility(View.VISIBLE);
             isFirstOpen = true;
             buttonLogin.setVisibility(View.GONE);
 
-            privacyCheckLink.setOnClickListener(new View.OnClickListener() {
+            checkPrivacyPolicy.setChecked(false);
+            checkPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    checkPrivacyPolicy.setChecked(true);
                     isFirstOpen = false;
                     Intent intent = new Intent(LoginActivity.this, PrivacyPolicyActivity.class);
                     startActivity(intent);
@@ -82,7 +85,8 @@ public class LoginActivity extends BaseActivity {
             editTextFirstName.setText(names[0]);
             editTextLastName.setVisibility(View.GONE);
             editTextLastName.setText(names[1]);
-            privacyCheckLink.setVisibility(View.GONE);
+            checkPrivacyPolicy.setVisibility(View.GONE);
+            checkPrivacyPolicy.setChecked(true);
             isFirstOpen = false;
             buttonLogin.setVisibility(View.VISIBLE);
 

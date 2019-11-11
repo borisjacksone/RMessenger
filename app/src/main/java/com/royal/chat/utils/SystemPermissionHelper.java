@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 public class SystemPermissionHelper {
     public static final int PERMISSIONS_FOR_SAVE_FILE_IMAGE_REQUEST = 1010;
     public static final int PERMISSIONS_FOR_SAVE_FILE_AUDIO_REQUEST = 2020;
-    public static final int PERMISSIONS_FOR_SEND_SMS_REQUEST = 3030;
+//    public static final int PERMISSIONS_FOR_SEND_SMS_REQUEST = 3030;
     public static final int PERMISSIONS_FOR_ALL = 4040;
 
     private Activity activity;
@@ -24,9 +24,9 @@ public class SystemPermissionHelper {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.CAMERA,
-            Manifest.permission.READ_SMS,
-            Manifest.permission.SEND_SMS,
-            Manifest.permission.READ_CONTACTS
+//            Manifest.permission.READ_SMS,
+//            Manifest.permission.SEND_SMS,
+//            Manifest.permission.READ_CONTACTS
     };
 
     public SystemPermissionHelper(Activity activity) {
@@ -45,9 +45,9 @@ public class SystemPermissionHelper {
         return isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE) && isPermissionGranted(Manifest.permission.RECORD_AUDIO);
     }
 
-    public boolean isSendSmsPermissionGranted() {
-        return isPermissionGranted(Manifest.permission.READ_SMS) && isPermissionGranted(Manifest.permission.SEND_SMS) && isPermissionGranted(Manifest.permission.READ_CONTACTS);
-    }
+//    public boolean isSendSmsPermissionGranted() {
+//        return isPermissionGranted(Manifest.permission.READ_SMS) && isPermissionGranted(Manifest.permission.SEND_SMS) && isPermissionGranted(Manifest.permission.READ_CONTACTS);
+//    }
 
     public boolean isAllPermissionGranted() {
         for (String permission : all_permissions) {
@@ -74,9 +74,9 @@ public class SystemPermissionHelper {
         checkAndRequestPermissions(PERMISSIONS_FOR_SAVE_FILE_AUDIO_REQUEST, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO});
     }
 
-    public void requestPermissionsForSendSms() {
-        checkAndRequestPermissions(PERMISSIONS_FOR_SEND_SMS_REQUEST, new String[]{Manifest.permission.READ_SMS, Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS});
-    }
+//    public void requestPermissionsForSendSms() {
+//        checkAndRequestPermissions(PERMISSIONS_FOR_SEND_SMS_REQUEST, new String[]{Manifest.permission.READ_SMS, Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS});
+//    }
 
     public void requestPermissionsForAll() {
         checkAndRequestPermissions(PERMISSIONS_FOR_ALL, all_permissions);

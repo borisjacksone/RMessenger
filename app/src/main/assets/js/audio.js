@@ -40,9 +40,13 @@ function startPlayer()
 function play_aud()
 {
     player.play();
+    document.getElementById("play_button").style.display = 'none';
+    document.getElementById("pause_button").style.display = 'inline';
 }
 
 function pause_aud()
 {
     player.pause();
+    document.getElementById("play_button").style.display = 'inline';
+    document.getElementById("pause_button").style.display = 'none';
 }
