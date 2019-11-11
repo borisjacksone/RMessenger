@@ -17,7 +17,6 @@
             android:text="@string/text_english"
             android:textSize="15sp"
             android:layout_margin="10sp"
-            android:layout_gravity="center_horizontal"
             android:checked="true"/>
         <RadioButton
             android:id="@+id/radioKorean"
@@ -25,7 +24,6 @@
             android:layout_height="wrap_content"
             android:text="@string/text_korean"
             android:textSize="15sp"
-            android:layout_gravity="center_horizontal"
             android:layout_margin="10sp"/>
     </RadioGroup>
 

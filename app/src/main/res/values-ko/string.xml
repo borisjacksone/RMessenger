@@ -139,7 +139,7 @@
     <string name="menu_select_image">이미지</string>
     <string name="menu_select_audio">오디오</string>
     <string name="dialog_choose_audio_from">오디오 선택…</string>
-    <string name="text_duration">음 장&#160;:&#160;</string>
+    <string name="text_duration">Time&#160;:&#160;</string>
     <string name="record_result_format">%02ds\n녹음파일</string>
     <string name="menu_dialogs_invite_friend">친구 초대</string>
     <string name="phone_not_selected">전화 번호를 선택하셔야 합니다.</string>
